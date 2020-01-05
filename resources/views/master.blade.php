@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>Laravel Vue</title>
+    <title>Controle Financeiro</title>
 
     <link rel="stylesheet" href="/css/app.css" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -38,8 +38,8 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
             <a href="index3.html" class="brand-link">
-                <img src="./img/effort.png" alt="Laravel Vue Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">Laravel Vue</span>
+                <img src="./img/effort.png" alt="Controle Financeiro Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">Controle Financeiro</span>
             </a>
 
 
@@ -79,6 +79,14 @@
                                     <router-link to="/users" class="nav-link" active-class="active" exact>
                                         <i class="fas fa-users nav-icon"></i>
                                         <p>Usuários</p>
+                                    </router-link>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview" active-class="active" exact>
+                                <li class="nav-item">
+                                    <router-link to="/accounts" class="nav-link" active-class="active" exact>
+                                        <i class="fas fa-landmark nav-icon"></i>
+                                        <p>Contas</p>
                                     </router-link>
                                 </li>
                             </ul>
