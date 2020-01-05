@@ -1983,6 +1983,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1991,7 +2004,8 @@ __webpack_require__.r(__webpack_exports__);
       form: new Form({
         id: "",
         name: "",
-        type: ""
+        type: "",
+        initialBalance: ""
       })
     };
   },
@@ -62947,7 +62961,7 @@ var render = function() {
       !_vm.$gate.isAdminOrAuthor() ? _c("not-found") : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "row mt-5" }, [
-        _c("div", { staticClass: "col-12" }, [
+        _c("div", { staticClass: "col-md-12" }, [
           _vm.$gate.isAdminOrAuthor()
             ? _c("div", { staticClass: "card" }, [
                 _c("div", { staticClass: "card-header" }, [
@@ -62988,7 +63002,7 @@ var render = function() {
                           _c("td", [_vm._v(_vm._s(account.name))]),
                           _vm._v(" "),
                           _c("td", [
-                            _vm._v(_vm._s(_vm._f("upText")(account.type)))
+                            _vm._v(_vm._s(_vm._f("accountType")(account.type)))
                           ]),
                           _vm._v(" "),
                           _c("td", [
@@ -63141,6 +63155,52 @@ var render = function() {
                           _vm._v(" "),
                           _c("has-error", {
                             attrs: { form: _vm.form, field: "name" }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "form-group" },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.initialBalance,
+                                expression: "form.initialBalance"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            class: {
+                              "is-invalid": _vm.form.errors.has(
+                                "inicialBalance"
+                              )
+                            },
+                            attrs: {
+                              type: "text",
+                              name: "initialBalance",
+                              placeholder: "Valor inicial (R$)"
+                            },
+                            domProps: { value: _vm.form.initialBalance },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.form,
+                                  "initialBalance",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "inicialBalance" }
                           })
                         ],
                         1
@@ -80601,8 +80661,24 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]({
   mode: "history",
   routes: routes
 });
-Vue.filter("upText", function (text) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
+Vue.filter("accountType", function (text) {
+  switch (text) {
+    case "current":
+      return "Corrente";
+
+    case "money":
+      return "Dinheiro";
+
+    case "salary":
+      return "Salário";
+
+    case "saving":
+      return "Poupança";
+
+    default:
+      return "Erro";
+  } //return text.charAt(0).toUpperCase() + text.slice(1);
+
 });
 Vue.filter("date_formatted", function (date) {
   return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format("DD/MM/YY");

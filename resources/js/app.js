@@ -73,8 +73,20 @@ const router = new VueRouter({
   routes
 });
 
-Vue.filter("upText", function(text) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
+Vue.filter("accountType", function(text) {
+  switch (text) {
+    case "current":
+      return "Corrente";
+    case "money":
+      return "Dinheiro";
+    case "salary":
+      return "Salário";
+    case "saving":
+      return "Poupança";
+    default:
+      return "Erro";
+  }
+  //return text.charAt(0).toUpperCase() + text.slice(1);
 });
 
 Vue.filter("date_formatted", function(date) {

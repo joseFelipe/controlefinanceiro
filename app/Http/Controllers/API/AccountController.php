@@ -5,10 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Account;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate as FacadesGate;
-// import the Intervention Image Manager Class
-use Intervention\Image\ImageManagerStatic as Image;
 
 class AccountController extends Controller
 {
@@ -39,14 +36,25 @@ class AccountController extends Controller
   public function store(Request $request)
   {
 
+    $account = new Account;
+
     $this->validate($request, [
       'name' => 'required|string|max:100',
     ]);
 
-    return Account::create([
-      'name' => $request['name'],
-      'type' => $request['type'],
-    ]);
+    $account->name = $request["name"];
+    $account->type = $request["type"];
+    $account->initialBalance = $request["initialBalance"];
+
+    $account->save();
+
+    return ["message" => "success"];
+
+    // return Account::create([
+    //   'name' => $request['name'],
+    //   'type' => $request['type'],
+    //   'initialBalance' => $request['initialBalance'],
+    // ]);
   }
 
   /**

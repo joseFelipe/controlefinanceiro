@@ -17,6 +17,6 @@ class Account extends Authenticatable
    * @var array
    */
   protected $fillable = [
-    'name', 'type'
+    'name', 'type', 'inicialBalance'
   ];
 }
