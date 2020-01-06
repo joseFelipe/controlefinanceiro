@@ -2340,28 +2340,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Swatches: Swatches
@@ -63979,11 +63957,7 @@ var render = function() {
                               class: {
                                 "is-invalid": _vm.form.errors.has("color")
                               },
-                              attrs: {
-                                name: "color",
-                                colors: "text-advanced",
-                                "popover-to": "right"
-                              },
+                              attrs: { name: "color", inline: "" },
                               model: {
                                 value: _vm.form.color,
                                 callback: function($$v) {
@@ -64067,7 +64041,7 @@ var staticRenderFns = [
           staticClass: "btn btn-danger",
           attrs: { type: "button", "data-dismiss": "modal" }
         },
-        [_vm._v("\n              Fechar\n            ")]
+        [_vm._v("Fechar")]
       ),
       _vm._v(" "),
       _c(

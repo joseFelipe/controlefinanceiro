@@ -36,21 +36,13 @@
                     <div v-bind:style="category.color | Color"></div>
                     <!-- <div
                       style="background-color: red; width: 40px; height: 30px"
-                    ></div> -->
+                    ></div>-->
                   </td>
                   <td>
-                    <a
-                      href="#"
-                      class="btn btn-primary btn-sm"
-                      @click="newCategoryModal(category)"
-                    >
+                    <a href="#" class="btn btn-primary btn-sm" @click="newCategoryModal(category)">
                       <i class="fa fa-edit"></i>
                     </a>
-                    <a
-                      href="#"
-                      @click="deleteCategory(category.id)"
-                      class="btn btn-danger btn-sm"
-                    >
+                    <a href="#" @click="deleteCategory(category.id)" class="btn btn-danger btn-sm">
                       <i class="fa fa-trash"></i>
                     </a>
                   </td>
@@ -59,10 +51,7 @@
             </table>
           </div>
           <div class="card-footer">
-            <pagination
-              :data="categories"
-              @pagination-change-page="getResults"
-            ></pagination>
+            <pagination :data="categories" @pagination-change-page="getResults"></pagination>
           </div>
         </div>
       </div>
@@ -77,18 +66,11 @@
               <span v-show="!editMode">Adicionar categoria</span>
               <span v-show="editMode">Editar categoria</span>
             </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form
-            @submit.prevent="editMode ? updateCategory() : createCategory()"
-          >
+          <form @submit.prevent="editMode ? updateCategory() : createCategory()">
             <div class="modal-body">
               <div class="form-group">
                 <input
@@ -111,21 +93,17 @@
                   <swatches
                     v-model="form.color"
                     name="color"
-                    colors="text-advanced"
                     :class="{
                       'is-invalid': form.errors.has('color')
                     }"
-                    popover-to="right"
+                    inline
                   ></swatches>
                   <has-error :form="form" field="color"></has-error>
                 </div>
               </div>
             </div>
-
             <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">
-                Fechar
-              </button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
               <button type="submit" class="btn btn-success">Salvar</button>
             </div>
           </form>
