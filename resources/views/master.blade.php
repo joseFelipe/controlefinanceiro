@@ -16,8 +16,7 @@
     <div class="wrapper" id="app">
 
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-
+        <nav class="main-header navbar navbar-expand navbar-primary navbar-dark">
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
@@ -35,7 +34,7 @@
             </div>
         </nav>
 
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <aside class="main-sidebar sidebar-light-primary elevation-4">
 
             <a href="index3.html" class="brand-link">
                 <img src="./img/effort.png" alt="Controle Financeiro Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -87,6 +86,14 @@
                                     <router-link to="/accounts" class="nav-link" active-class="active" exact>
                                         <i class="fas fa-landmark nav-icon"></i>
                                         <p>Contas</p>
+                                    </router-link>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview" active-class="active" exact>
+                                <li class="nav-item">
+                                    <router-link to="/categories" class="nav-link" active-class="active" exact>
+                                        <i class="fas fa-tags nav-icon"></i>
+                                        <p>Categorias</p>
                                     </router-link>
                                 </li>
                             </ul>

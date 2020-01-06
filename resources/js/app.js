@@ -5,6 +5,10 @@ import Moment from "moment";
 import { Form, HasError, AlertError } from "vform";
 import VueProgressBar from "vue-progressbar";
 import Swal from "sweetalert2";
+import Swatches from "vue-swatches";
+
+// Import the styles too, globally
+import "vue-swatches/dist/vue-swatches.min.css";
 
 import Gate from "./Gate";
 
@@ -12,6 +16,7 @@ Vue.prototype.$gate = new Gate(window.user);
 
 window.swal = Swal;
 window.Form = Form;
+window.Swatches = Swatches;
 
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);
@@ -65,7 +70,14 @@ const routes = [
     component: require("./components/Developer.vue").default
   },
   { path: "/users", component: require("./components/Users.vue").default },
-  { path: "/accounts", component: require("./components/Accounts.vue").default }
+  {
+    path: "/accounts",
+    component: require("./components/Accounts.vue").default
+  },
+  {
+    path: "/categories",
+    component: require("./components/Categories.vue").default
+  }
 ];
 
 const router = new VueRouter({
@@ -86,7 +98,18 @@ Vue.filter("accountType", function(text) {
     default:
       return "Erro";
   }
-  //return text.charAt(0).toUpperCase() + text.slice(1);
+});
+
+Vue.filter("upText", function(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+});
+
+Vue.filter("Color", function(color) {
+  return (
+    "background-color: " +
+    color +
+    "; width: 30px; height: 30px; border-radius: 50%"
+  );
 });
 
 Vue.filter("date_formatted", function(date) {
