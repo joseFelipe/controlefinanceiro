@@ -34,9 +34,6 @@
                   <td>{{ category.name }}</td>
                   <td>
                     <div v-bind:style="category.color | Color"></div>
-                    <!-- <div
-                      style="background-color: red; width: 40px; height: 30px"
-                    ></div>-->
                   </td>
                   <td>
                     <a href="#" class="btn btn-primary btn-sm" @click="newCategoryModal(category)">
@@ -74,10 +71,30 @@
             <div class="modal-body">
               <div class="form-group">
                 <input
+                  type="radio"
+                  name="mainCategory"
+                  id="mainCategory"
+                  v-bind:value="true"
+                  v-model="mainCategory"
+                />
+                <label for="mainCategory">Categoria principal</label>
+                <br />
+                <input
+                  type="radio"
+                  name="isSubCategory"
+                  id="subCategory"
+                  v-bind:value="false"
+                  v-model="mainCategory"
+                />
+                <label for="subCategory">Sub-categoria</label>
+                <br />
+              </div>
+              <div class="form-group">
+                <input
                   v-model="form.name"
                   type="text"
                   name="name"
-                  placeholder="Nome da categoria"
+                  placeholder="Nome"
                   class="form-control"
                   :class="{
                     'is-invalid': form.errors.has('name')
@@ -85,7 +102,7 @@
                 />
                 <has-error :form="form" field="category"></has-error>
               </div>
-              <div class="form__field">
+              <div v-if="mainCategory" class="form__field">
                 <div class="form__label">
                   <strong>Selecione uma cor:</strong>
                 </div>
@@ -100,6 +117,21 @@
                   ></swatches>
                   <has-error :form="form" field="color"></has-error>
                 </div>
+              </div>
+              <div v-if="!mainCategory" class="form-group">
+                <select
+                  v-model="form.parentCategory"
+                  name="parentCategory"
+                  class="form-control"
+                  :class="{
+                                        'is-invalid': form.errors.has('parentCategory')
+                                    }"
+                >
+                  <option value>Selecione a categoria pai</option>
+
+                  <option v-for="category in categories.data" :key="category.id">{{ category.name}}</option>
+                </select>
+                <has-error :form="form" field="parentCategory"></has-error>
               </div>
             </div>
             <div class="modal-footer">
@@ -121,10 +153,12 @@ export default {
     return {
       editMode: false,
       categories: {},
+      mainCategory: true,
       form: new Form({
         id: "",
         name: "",
-        color: "#1CA085"
+        color: "#1CA085",
+        parentCategory: ""
       })
     };
   },
@@ -135,6 +169,7 @@ export default {
         this.categories = response.data;
       });
     },
+
     async loadCategories(search = false) {
       //Verify if the current user is admin
       if (!this.$gate.isAdminOrAuthor()) {

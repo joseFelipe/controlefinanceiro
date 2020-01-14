@@ -2340,6 +2340,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Swatches: Swatches
@@ -2349,10 +2381,12 @@ __webpack_require__.r(__webpack_exports__);
     return {
       editMode: false,
       categories: {},
+      mainCategory: true,
       form: new Form({
         id: "",
         name: "",
-        color: "#1CA085"
+        color: "#1CA085",
+        parentCategory: ""
       })
     };
   },
@@ -63861,6 +63895,70 @@ var render = function() {
                   },
                   [
                     _c("div", { staticClass: "modal-body" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.mainCategory,
+                              expression: "mainCategory"
+                            }
+                          ],
+                          attrs: {
+                            type: "radio",
+                            name: "mainCategory",
+                            id: "mainCategory"
+                          },
+                          domProps: {
+                            value: true,
+                            checked: _vm._q(_vm.mainCategory, true)
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.mainCategory = true
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "mainCategory" } }, [
+                          _vm._v("Categoria principal")
+                        ]),
+                        _vm._v(" "),
+                        _c("br"),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.mainCategory,
+                              expression: "mainCategory"
+                            }
+                          ],
+                          attrs: {
+                            type: "radio",
+                            name: "isSubCategory",
+                            id: "subCategory"
+                          },
+                          domProps: {
+                            value: false,
+                            checked: _vm._q(_vm.mainCategory, false)
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.mainCategory = false
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "subCategory" } }, [
+                          _vm._v("Sub-categoria")
+                        ]),
+                        _vm._v(" "),
+                        _c("br")
+                      ]),
+                      _vm._v(" "),
                       _c(
                         "div",
                         { staticClass: "form-group" },
@@ -63881,7 +63979,7 @@ var render = function() {
                             attrs: {
                               type: "text",
                               name: "name",
-                              placeholder: "Nome da categoria"
+                              placeholder: "Nome"
                             },
                             domProps: { value: _vm.form.name },
                             on: {
@@ -63901,34 +63999,109 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "form__field" }, [
-                        _vm._m(2),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "form__input" },
-                          [
-                            _c("swatches", {
-                              class: {
-                                "is-invalid": _vm.form.errors.has("color")
-                              },
-                              attrs: { name: "color", inline: "" },
-                              model: {
-                                value: _vm.form.color,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.form, "color", $$v)
-                                },
-                                expression: "form.color"
-                              }
-                            }),
+                      _vm.mainCategory
+                        ? _c("div", { staticClass: "form__field" }, [
+                            _vm._m(2),
                             _vm._v(" "),
-                            _c("has-error", {
-                              attrs: { form: _vm.form, field: "color" }
-                            })
-                          ],
-                          1
-                        )
-                      ])
+                            _c(
+                              "div",
+                              { staticClass: "form__input" },
+                              [
+                                _c("swatches", {
+                                  class: {
+                                    "is-invalid": _vm.form.errors.has("color")
+                                  },
+                                  attrs: { name: "color", inline: "" },
+                                  model: {
+                                    value: _vm.form.color,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "color", $$v)
+                                    },
+                                    expression: "form.color"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("has-error", {
+                                  attrs: { form: _vm.form, field: "color" }
+                                })
+                              ],
+                              1
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      !_vm.mainCategory
+                        ? _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c(
+                                "select",
+                                {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.form.parentCategory,
+                                      expression: "form.parentCategory"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  class: {
+                                    "is-invalid": _vm.form.errors.has(
+                                      "parentCategory"
+                                    )
+                                  },
+                                  attrs: { name: "parentCategory" },
+                                  on: {
+                                    change: function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.$set(
+                                        _vm.form,
+                                        "parentCategory",
+                                        $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("option", { attrs: { value: "" } }, [
+                                    _vm._v("Selecione a categoria pai")
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._l(_vm.categories.data, function(
+                                    category
+                                  ) {
+                                    return _c("option", { key: category.id }, [
+                                      _vm._v(_vm._s(category.name))
+                                    ])
+                                  })
+                                ],
+                                2
+                              ),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: {
+                                  form: _vm.form,
+                                  field: "parentCategory"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e()
                     ]),
                     _vm._v(" "),
                     _vm._m(3)

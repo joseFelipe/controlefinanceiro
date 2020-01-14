@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Category;
+use App\SubCategory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate as FacadesGate;
 
 class CategoryController extends Controller
@@ -24,6 +26,13 @@ class CategoryController extends Controller
   {
     if (FacadesGate::allows('isAdmin') || FacadesGate::allows('isAuthor')) {
       return Category::latest()->paginate(10);
+
+      // $categories = DB::table('subcategories')
+      //   ->leftJoin('categories', 'subcategories.id_category', '=', 'categories.id')
+      //   ->select('subcategories.name as subcategorie_name', 'categories.*', 'subcategories.id as id_subcategorie')
+      //   ->get();
+
+      // return $categories;
     }
   }
 
@@ -36,16 +45,23 @@ class CategoryController extends Controller
   public function store(Request $request)
   {
 
-    $category = new Category;
-
     $this->validate($request, [
       'name' => 'required|string|max:100',
     ]);
 
-    $category->name = $request["name"];
-    $category->color = $request["color"];
+    if ($request["parentCategory"] === 0) {
+      $category = new Category;
 
-    $category->save();
+      $category->name = $request["name"];
+      $category->color = $request["color"];
+
+      $category->save();
+
+      return ["message" => "subcategory success"];
+    }
+
+
+
 
     return ["message" => "success"];
   }
