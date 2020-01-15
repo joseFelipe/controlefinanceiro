@@ -64,9 +64,13 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Criar') }}
+                                    {{ __('Criar conta') }}
                                 </button>
                             </div>
+                        </div>
+                        <div class="form-group-row" style="text-align: center;">
+                            <hr>
+                            <a class="btn btn-outline-primary btn-block" href="{{ route('login') }}">{{ __('Voltar para página de login') }}</a>
                         </div>
                     </form>
                 </div>

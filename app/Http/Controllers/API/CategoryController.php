@@ -25,14 +25,21 @@ class CategoryController extends Controller
   public function index()
   {
     if (FacadesGate::allows('isAdmin') || FacadesGate::allows('isAuthor')) {
-      return Category::latest()->paginate(10);
+      // return Category::latest()->paginate(10);
 
-      // $categories = DB::table('subcategories')
-      //   ->leftJoin('categories', 'subcategories.id_category', '=', 'categories.id')
-      //   ->select('subcategories.name as subcategorie_name', 'categories.*', 'subcategories.id as id_subcategorie')
-      //   ->get();
+      $categories = DB::table('categories')
+        ->select('categories.*')
+        ->where('parent_id', '=', 0)
+        ->orderby('name', 'asc')
+        ->get();
 
-      // return $categories;
+      $subCategories = DB::table('categories')
+        ->select('categories.*')
+        ->where('parent_id', '<>', 0)
+        ->orderby('name', 'asc')
+        ->get();
+
+      return ["categories" => $categories, "subcategories" => $subCategories];
     }
   }
 
@@ -49,21 +56,14 @@ class CategoryController extends Controller
       'name' => 'required|string|max:100',
     ]);
 
-    if ($request["parentCategory"] === 0) {
-      $category = new Category;
+    $category = new Category;
 
-      $category->name = $request["name"];
-      $category->color = $request["color"];
+    $category->name = $request["name"];
+    $category->color = $request["color"];
+    $category->parent_id = $request["parentCategory"];
+    $category->save();
 
-      $category->save();
-
-      return ["message" => "subcategory success"];
-    }
-
-
-
-
-    return ["message" => "success"];
+    return ["message" => "subcategory success"];
   }
 
   /**

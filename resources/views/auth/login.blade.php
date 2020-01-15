@@ -58,6 +58,8 @@
                                         {{ __('Esqueceu sua senha?') }}
                                     </a>
                                 @endif
+                                <hr>
+                                <a class="btn btn-block btn-outline-info" href="{{ route('register') }}">{{ __('Criar conta') }}</a>
                             </div>
                         </div>
                     </form>

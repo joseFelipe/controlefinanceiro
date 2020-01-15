@@ -108,7 +108,7 @@ Vue.filter("Color", function(color) {
   return (
     "background-color: " +
     color +
-    "; width: 30px; height: 30px; border-radius: 50%"
+    "; width: 15px; height: 15px; border-radius: 50%; margin-right: 0.5%;"
   );
 });
 

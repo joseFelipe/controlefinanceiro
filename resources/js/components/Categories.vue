@@ -18,8 +18,53 @@
               </button>
             </div>
           </div>
-          <div class="card-body table-responsive p-0">
-            <table class="table table-hover">
+          <div class="card-body">
+            <ul
+              id="ul-list-categories"
+              v-for="category in categories.categories"
+              :key="category.id"
+            >
+              <li>
+                <div @mouseover="active = true" @mouseleave="active = false">
+                  <div v-bind:style="category.color | Color"></div>
+                  <p>{{ category.name }}</p>
+                  <a href="#" @click="newCategoryModal(category)">
+                    Editar
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a v-show="active" href="#" @click="deleteCategory(category.id)">
+                    Excluir
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </div>
+              </li>
+
+              <ul v-for="subcategory in categories.subcategories" :key="subcategory.id">
+                <li v-if="category.id == subcategory.parent_id">
+                  <p>{{ subcategory.name }}</p>
+                  <a href="#" @click="newCategoryModal(subcategory)">
+                    Editar subcategoria
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a href="#" @click="deleteCategory(subcategory.id)">
+                    Excluir subcategoria
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </li>
+              </ul>
+              <hr />
+            </ul>
+            <!-- data.categories.forEach(category => {
+            console.log(category.id, category.name);
+            data.subcategories.forEach(subcategory => {
+              // console.log(subcategory.id);
+              // console.log(category.parent_id);
+              if (category.id == subcategory.parent_id) {
+                console.log("- - " + subcategory.id, subcategory.name);
+              }
+            });
+            });-->
+            <!-- <table class="table table-hover">
               <thead>
                 <tr>
                   <th>ID</th>
@@ -45,7 +90,7 @@
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </table>-->
           </div>
           <div class="card-footer">
             <pagination :data="categories" @pagination-change-page="getResults"></pagination>
@@ -129,7 +174,11 @@
                 >
                   <option value>Selecione a categoria pai</option>
 
-                  <option v-for="category in categories.data" :key="category.id">{{ category.name}}</option>
+                  <option
+                    v-for="category in categories.categories"
+                    :value="category.id"
+                    :key="category.id"
+                  >{{ category.name}}</option>
                 </select>
                 <has-error :form="form" field="parentCategory"></has-error>
               </div>
@@ -154,16 +203,24 @@ export default {
       editMode: false,
       categories: {},
       mainCategory: true,
+      active: false,
       form: new Form({
         id: "",
         name: "",
         color: "#1CA085",
-        parentCategory: ""
+        parentCategory: 0
       })
     };
   },
 
   methods: {
+    // mouseOver: function() {
+    //   this.active = true;
+    // },
+    // mouseLeave: function() {
+    //   this.active = false;
+    // },
+
     getResults(page = 1) {
       axios.get("api/categories?page=" + page).then(response => {
         this.categories = response.data;
@@ -182,9 +239,20 @@ export default {
           .get("api/findCategory?q=" + this.$parent.search)
           .then(({ data }) => (this.categories = data));
       } else {
-        await axios
-          .get("api/category")
-          .then(({ data }) => (this.categories = data));
+        await axios.get("api/category").then(({ data }) => {
+          this.categories = data;
+
+          data.categories.forEach(category => {
+            console.log(category.id, category.name);
+            data.subcategories.forEach(subcategory => {
+              // console.log(subcategory.id);
+              // console.log(category.parent_id);
+              if (category.id == subcategory.parent_id) {
+                console.log("- - " + subcategory.id, subcategory.name);
+              }
+            });
+          });
+        });
       }
 
       this.$Progress.finish();

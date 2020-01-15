@@ -1,0 +1,22 @@
+#ul-list-categories {
+  list-style-type: none;
+  padding: 2%;
+}
+
+#ul-list-categories a {
+  font-size: 13px;
+  margin: 0px 10px 0px 10px;
+}
+
+#ul-list-categories li {
+  list-style-type: none;
+}
+
+#ul-list-categories li div {
+  display: flex;
+}
+
+#ul-list-categories p {
+  font-size: 14px;
+  color: #999;
+}

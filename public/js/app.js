@@ -2372,6 +2372,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Swatches: Swatches
@@ -2382,15 +2431,22 @@ __webpack_require__.r(__webpack_exports__);
       editMode: false,
       categories: {},
       mainCategory: true,
+      active: false,
       form: new Form({
         id: "",
         name: "",
         color: "#1CA085",
-        parentCategory: ""
+        parentCategory: 0
       })
     };
   },
   methods: {
+    // mouseOver: function() {
+    //   this.active = true;
+    // },
+    // mouseLeave: function() {
+    //   this.active = false;
+    // },
     getResults: function getResults() {
       var _this = this;
 
@@ -2439,7 +2495,17 @@ __webpack_require__.r(__webpack_exports__);
               _context.next = 11;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("api/category").then(function (_ref2) {
                 var data = _ref2.data;
-                return _this2.categories = data;
+                _this2.categories = data;
+                data.categories.forEach(function (category) {
+                  console.log(category.id, category.name);
+                  data.subcategories.forEach(function (subcategory) {
+                    // console.log(subcategory.id);
+                    // console.log(category.parent_id);
+                    if (category.id == subcategory.parent_id) {
+                      console.log("- - " + subcategory.id, subcategory.name);
+                    }
+                  });
+                });
               }));
 
             case 11:
@@ -63760,59 +63826,140 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "card-body table-responsive p-0" }, [
-                  _c("table", { staticClass: "table table-hover" }, [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c(
-                      "tbody",
-                      _vm._l(_vm.categories.data, function(category) {
-                        return _c("tr", { key: category.id }, [
-                          _c("td", [_vm._v(_vm._s(category.id))]),
-                          _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(category.name))]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c("div", {
-                              style: _vm._f("Color")(category.color)
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c(
-                              "a",
-                              {
-                                staticClass: "btn btn-primary btn-sm",
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.newCategoryModal(category)
-                                  }
+                _c(
+                  "div",
+                  { staticClass: "card-body" },
+                  _vm._l(_vm.categories.categories, function(category) {
+                    return _c(
+                      "ul",
+                      { key: category.id, attrs: { id: "ul-list-categories" } },
+                      [
+                        _c("li", [
+                          _c(
+                            "div",
+                            {
+                              on: {
+                                mouseover: function($event) {
+                                  _vm.active = true
+                                },
+                                mouseleave: function($event) {
+                                  _vm.active = false
                                 }
-                              },
-                              [_c("i", { staticClass: "fa fa-edit" })]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass: "btn btn-danger btn-sm",
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.deleteCategory(category.id)
+                              }
+                            },
+                            [
+                              _c("div", {
+                                style: _vm._f("Color")(category.color)
+                              }),
+                              _vm._v(" "),
+                              _c("p", [_vm._v(_vm._s(category.name))]),
+                              _vm._v(" "),
+                              _c(
+                                "a",
+                                {
+                                  attrs: { href: "#" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.newCategoryModal(category)
+                                    }
                                   }
-                                }
-                              },
-                              [_c("i", { staticClass: "fa fa-trash" })]
-                            )
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                  Editar\n                  "
+                                  ),
+                                  _c("i", { staticClass: "fa fa-edit" })
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "a",
+                                {
+                                  directives: [
+                                    {
+                                      name: "show",
+                                      rawName: "v-show",
+                                      value: _vm.active,
+                                      expression: "active"
+                                    }
+                                  ],
+                                  attrs: { href: "#" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.deleteCategory(category.id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                  Excluir\n                  "
+                                  ),
+                                  _c("i", { staticClass: "fa fa-trash" })
+                                ]
+                              )
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.categories.subcategories, function(
+                          subcategory
+                        ) {
+                          return _c("ul", { key: subcategory.id }, [
+                            category.id == subcategory.parent_id
+                              ? _c("li", [
+                                  _c("p", [_vm._v(_vm._s(subcategory.name))]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "a",
+                                    {
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.newCategoryModal(
+                                            subcategory
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                  Editar subcategoria\n                  "
+                                      ),
+                                      _c("i", { staticClass: "fa fa-edit" })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "a",
+                                    {
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.deleteCategory(
+                                            subcategory.id
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                  Excluir subcategoria\n                  "
+                                      ),
+                                      _c("i", { staticClass: "fa fa-trash" })
+                                    ]
+                                  )
+                                ])
+                              : _vm._e()
                           ])
-                        ])
-                      }),
-                      0
+                        }),
+                        _vm._v(" "),
+                        _c("hr")
+                      ],
+                      2
                     )
-                  ])
-                ]),
+                  }),
+                  0
+                ),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -63878,7 +64025,7 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _vm._m(1)
+                  _vm._m(0)
                 ]),
                 _vm._v(" "),
                 _c(
@@ -64001,7 +64148,7 @@ var render = function() {
                       _vm._v(" "),
                       _vm.mainCategory
                         ? _c("div", { staticClass: "form__field" }, [
-                            _vm._m(2),
+                            _vm._m(1),
                             _vm._v(" "),
                             _c(
                               "div",
@@ -64081,12 +64228,17 @@ var render = function() {
                                     _vm._v("Selecione a categoria pai")
                                   ]),
                                   _vm._v(" "),
-                                  _vm._l(_vm.categories.data, function(
+                                  _vm._l(_vm.categories.categories, function(
                                     category
                                   ) {
-                                    return _c("option", { key: category.id }, [
-                                      _vm._v(_vm._s(category.name))
-                                    ])
+                                    return _c(
+                                      "option",
+                                      {
+                                        key: category.id,
+                                        domProps: { value: category.id }
+                                      },
+                                      [_vm._v(_vm._s(category.name))]
+                                    )
                                   })
                                 ],
                                 2
@@ -64104,7 +64256,7 @@ var render = function() {
                         : _vm._e()
                     ]),
                     _vm._v(" "),
-                    _vm._m(3)
+                    _vm._m(2)
                   ]
                 )
               ])
@@ -64117,22 +64269,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("ID")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Nome")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Cor")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Ações")])
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -81557,7 +81693,7 @@ Vue.filter("upText", function (text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 });
 Vue.filter("Color", function (color) {
-  return "background-color: " + color + "; width: 30px; height: 30px; border-radius: 50%";
+  return "background-color: " + color + "; width: 15px; height: 15px; border-radius: 50%; margin-right: 0.5%;";
 });
 Vue.filter("date_formatted", function (date) {
   return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format("DD/MM/YY");
