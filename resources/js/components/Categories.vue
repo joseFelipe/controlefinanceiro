@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <not-found v-if="!$gate.isAdminOrAuthor()"></not-found>
-    <div class="row mt-5">
+    <div class="row">
       <div class="col-md-12">
-        <div class="card" v-if="$gate.isAdminOrAuthor()">
+        <div class="card mt-5" v-if="$gate.isAdminOrAuthor()">
           <div class="card-header">
             <h3 class="card-title">Categorias</h3>
 
@@ -164,7 +164,7 @@
 
 <script>
 export default {
-  components: { Swatches }, // window.VueSwatches.default - from CDN
+  components: { Swatches },
 
   data() {
     return {

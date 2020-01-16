@@ -15,8 +15,8 @@
 <template>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-12 mt-5">
-        <div class="card card-widget widget-user">
+      <div class="col-md-12">
+        <div class="card card-widget widget-user mt-5">
           <div class="widget-user-header" style="background: url(./img/user-cover.jpg)"></div>
           <div class="widget-user-image">
             <img class="img-circle" :src="getProfilePhoto()" alt="User Avatar" />

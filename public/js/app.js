@@ -2393,7 +2393,6 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Swatches: Swatches
   },
-  // window.VueSwatches.default - from CDN
   data: function data() {
     return {
       editMode: false,
@@ -2639,8 +2638,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
 //
 //
 //
@@ -63351,10 +63348,10 @@ var render = function() {
     [
       !_vm.$gate.isAdminOrAuthor() ? _c("not-found") : _vm._e(),
       _vm._v(" "),
-      _c("div", { staticClass: "row mt-5" }, [
+      _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-md-12" }, [
           _vm.$gate.isAdminOrAuthor()
-            ? _c("div", { staticClass: "card" }, [
+            ? _c("div", { staticClass: "card mt-5" }, [
                 _c("div", { staticClass: "card-header" }, [
                   _c("h3", { staticClass: "card-title" }, [_vm._v("Contas")]),
                   _vm._v(" "),
@@ -63764,10 +63761,10 @@ var render = function() {
     [
       !_vm.$gate.isAdminOrAuthor() ? _c("not-found") : _vm._e(),
       _vm._v(" "),
-      _c("div", { staticClass: "row mt-5" }, [
+      _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-md-12" }, [
           _vm.$gate.isAdminOrAuthor()
-            ? _c("div", { staticClass: "card" }, [
+            ? _c("div", { staticClass: "card mt-5" }, [
                 _c("div", { staticClass: "card-header" }, [
                   _c("h3", { staticClass: "card-title" }, [
                     _vm._v("Categorias")
@@ -64349,14 +64346,12 @@ var staticRenderFns = [
     return _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "row justify-content-center" }, [
         _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card mt-5" }, [
             _c("div", { staticClass: "card-header" }, [
               _vm._v("Example Component")
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v("\n                    Dashboard\n                ")
-            ])
+            _c("div", { staticClass: "card-body" }, [_vm._v("Dashboard")])
           ])
         ])
       ])
@@ -64387,7 +64382,7 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-8" }, [
-        _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card mt-5" }, [
           _c("div", { staticClass: "card-header" }, [
             _vm._v("Example Component")
           ]),
@@ -64553,8 +64548,8 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-12 mt-5" }, [
-        _c("div", { staticClass: "card card-widget widget-user" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", { staticClass: "card card-widget widget-user mt-5" }, [
           _c("div", {
             staticClass: "widget-user-header",
             staticStyle: { background: "url(./img/user-cover.jpg)" }
@@ -64844,10 +64839,10 @@ var render = function() {
     [
       !_vm.$gate.isAdminOrAuthor() ? _c("not-found") : _vm._e(),
       _vm._v(" "),
-      _c("div", { staticClass: "row mt-5" }, [
+      _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-12" }, [
           _vm.$gate.isAdminOrAuthor()
-            ? _c("div", { staticClass: "card" }, [
+            ? _c("div", { staticClass: "card mt-5" }, [
                 _c("div", { staticClass: "card-header" }, [
                   _c("h3", { staticClass: "card-title" }, [_vm._v("Usuários")]),
                   _vm._v(" "),
