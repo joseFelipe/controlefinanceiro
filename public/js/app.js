@@ -2389,38 +2389,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Swatches: Swatches
@@ -2431,7 +2399,7 @@ __webpack_require__.r(__webpack_exports__);
       editMode: false,
       categories: {},
       mainCategory: true,
-      active: false,
+      // active: false,
       form: new Form({
         id: "",
         name: "",
@@ -2441,12 +2409,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    // mouseOver: function() {
-    //   this.active = true;
-    // },
-    // mouseLeave: function() {
-    //   this.active = false;
-    // },
     getResults: function getResults() {
       var _this = this;
 
@@ -2496,15 +2458,13 @@ __webpack_require__.r(__webpack_exports__);
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("api/category").then(function (_ref2) {
                 var data = _ref2.data;
                 _this2.categories = data;
-                data.categories.forEach(function (category) {
-                  console.log(category.id, category.name);
-                  data.subcategories.forEach(function (subcategory) {
-                    // console.log(subcategory.id);
-                    // console.log(category.parent_id);
-                    if (category.id == subcategory.parent_id) {
-                      console.log("- - " + subcategory.id, subcategory.name);
-                    }
-                  });
+
+                _this2.categories.categories.forEach(function (category) {
+                  _this2.$set(category, "active", false);
+                });
+
+                _this2.categories.subcategories.forEach(function (subcategory) {
+                  _this2.$set(subcategory, "active", false);
                 });
               }));
 
@@ -2525,8 +2485,17 @@ __webpack_require__.r(__webpack_exports__);
         this.editMode = false;
         this.form.reset();
         this.form.color = "#1CA085";
+        this.mainCategory ? this.form.parentCategory = 0 : this.form.parentCategory = 1;
       } else {
         this.editMode = true;
+
+        if (category.parent_id !== 0) {
+          this.mainCategory = false;
+          category.parentCategory = category.parent_id;
+        } else {
+          this.mainCategory = true;
+        }
+
         this.form.fill(category);
       }
 
@@ -2542,7 +2511,7 @@ __webpack_require__.r(__webpack_exports__);
               this.$Progress.start();
               _context2.next = 3;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(this.form.post("/api/category").then(function () {
-                Fire.$emit("UpdateCategoriesTable");
+                Fire.$emit("RefreshCategoriesTable");
                 $("#newCategoryModal").modal("hide");
                 Toast.fire({
                   icon: "success",
@@ -2575,7 +2544,7 @@ __webpack_require__.r(__webpack_exports__);
             case 0:
               this.$Progress.start();
               this.form.put("api/category/" + this.form.id).then(function () {
-                Fire.$emit("UpdateCategoriesTable");
+                Fire.$emit("RefreshCategoriesTable");
                 $("#newCategoryModal").modal("hide");
                 Toast.fire({
                   icon: "success",
@@ -2621,7 +2590,7 @@ __webpack_require__.r(__webpack_exports__);
                     icon: "success",
                     title: "Categoria excluída com sucesso"
                   });
-                  Fire.$emit("UpdateCategoriesTable");
+                  Fire.$emit("RefreshCategoriesTable");
 
                   _this5.$Progress.finish();
                 })["catch"](function (e) {
@@ -2651,7 +2620,7 @@ __webpack_require__.r(__webpack_exports__);
       _this6.loadCategories(true);
     });
     this.loadCategories();
-    Fire.$on("UpdateCategoriesTable", function () {
+    Fire.$on("RefreshCategoriesTable", function () {
       _this6.loadCategories();
     });
     this.$Progress.finish();
@@ -63808,7 +63777,7 @@ var render = function() {
                     _c(
                       "button",
                       {
-                        staticClass: "btn btn-block btn-primary btn-sm",
+                        staticClass: "btn btn-primary",
                         attrs: { type: "button" },
                         on: {
                           click: function($event) {
@@ -63817,9 +63786,7 @@ var render = function() {
                         }
                       },
                       [
-                        _vm._v(
-                          "\n              Adicionar categoria\n              "
-                        ),
+                        _vm._v("\n              Adicionar\n              "),
                         _c("i", { staticClass: "fas fa-plus-circle" })
                       ]
                     )
@@ -63834,20 +63801,20 @@ var render = function() {
                       "ul",
                       { key: category.id, attrs: { id: "ul-list-categories" } },
                       [
-                        _c("li", [
-                          _c(
-                            "div",
-                            {
-                              on: {
-                                mouseover: function($event) {
-                                  _vm.active = true
-                                },
-                                mouseleave: function($event) {
-                                  _vm.active = false
-                                }
+                        _c(
+                          "li",
+                          {
+                            on: {
+                              mouseover: function($event) {
+                                category.active = true
+                              },
+                              mouseleave: function($event) {
+                                category.active = false
                               }
-                            },
-                            [
+                            }
+                          },
+                          [
+                            _c("div", [
                               _c("div", {
                                 style: _vm._f("Color")(category.color)
                               }),
@@ -63855,75 +63822,23 @@ var render = function() {
                               _c("p", [_vm._v(_vm._s(category.name))]),
                               _vm._v(" "),
                               _c(
-                                "a",
-                                {
-                                  attrs: { href: "#" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.newCategoryModal(category)
-                                    }
-                                  }
-                                },
+                                "div",
+                                { class: { inactive: !category.active } },
                                 [
-                                  _vm._v(
-                                    "\n                  Editar\n                  "
-                                  ),
-                                  _c("i", { staticClass: "fa fa-edit" })
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "a",
-                                {
-                                  directives: [
-                                    {
-                                      name: "show",
-                                      rawName: "v-show",
-                                      value: _vm.active,
-                                      expression: "active"
-                                    }
-                                  ],
-                                  attrs: { href: "#" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.deleteCategory(category.id)
-                                    }
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                  Excluir\n                  "
-                                  ),
-                                  _c("i", { staticClass: "fa fa-trash" })
-                                ]
-                              )
-                            ]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _vm._l(_vm.categories.subcategories, function(
-                          subcategory
-                        ) {
-                          return _c("ul", { key: subcategory.id }, [
-                            category.id == subcategory.parent_id
-                              ? _c("li", [
-                                  _c("p", [_vm._v(_vm._s(subcategory.name))]),
-                                  _vm._v(" "),
                                   _c(
                                     "a",
                                     {
+                                      staticClass: "text-info",
                                       attrs: { href: "#" },
                                       on: {
                                         click: function($event) {
-                                          return _vm.newCategoryModal(
-                                            subcategory
-                                          )
+                                          return _vm.newCategoryModal(category)
                                         }
                                       }
                                     },
                                     [
                                       _vm._v(
-                                        "\n                  Editar subcategoria\n                  "
+                                        "\n                    editar\n                    "
                                       ),
                                       _c("i", { staticClass: "fa fa-edit" })
                                     ]
@@ -63932,25 +63847,115 @@ var render = function() {
                                   _c(
                                     "a",
                                     {
+                                      staticClass: "text-danger",
                                       attrs: { href: "#" },
                                       on: {
                                         click: function($event) {
-                                          return _vm.deleteCategory(
-                                            subcategory.id
-                                          )
+                                          return _vm.deleteCategory(category.id)
                                         }
                                       }
                                     },
                                     [
                                       _vm._v(
-                                        "\n                  Excluir subcategoria\n                  "
+                                        "\n                    excluir\n                    "
                                       ),
                                       _c("i", { staticClass: "fa fa-trash" })
                                     ]
                                   )
-                                ])
-                              : _vm._e()
-                          ])
+                                ]
+                              )
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _vm._l(_vm.categories.subcategories, function(
+                          subcategory
+                        ) {
+                          return _c(
+                            "ul",
+                            {
+                              key: subcategory.id,
+                              attrs: { id: "ul-list-subcategories" }
+                            },
+                            [
+                              category.id == subcategory.parent_id
+                                ? _c(
+                                    "li",
+                                    {
+                                      on: {
+                                        mouseover: function($event) {
+                                          subcategory.active = true
+                                        },
+                                        mouseleave: function($event) {
+                                          subcategory.active = false
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("p", [
+                                        _vm._v(_vm._s(subcategory.name))
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          class: {
+                                            inactive: !subcategory.active
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "text-info",
+                                              attrs: { href: "#" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.newCategoryModal(
+                                                    subcategory
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                    editar\n                    "
+                                              ),
+                                              _c("i", {
+                                                staticClass: "fa fa-edit"
+                                              })
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "text-danger",
+                                              attrs: { href: "#" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.deleteCategory(
+                                                    subcategory.id
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                    excluir\n                    "
+                                              ),
+                                              _c("i", {
+                                                staticClass: "fa fa-trash"
+                                              })
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
+                            ]
+                          )
                         }),
                         _vm._v(" "),
                         _c("hr")
@@ -64199,7 +64204,10 @@ var render = function() {
                                       "parentCategory"
                                     )
                                   },
-                                  attrs: { name: "parentCategory" },
+                                  attrs: {
+                                    required: "",
+                                    name: "parentCategory"
+                                  },
                                   on: {
                                     change: function($event) {
                                       var $$selectedVal = Array.prototype.filter
@@ -64223,25 +64231,19 @@ var render = function() {
                                     }
                                   }
                                 },
-                                [
-                                  _c("option", { attrs: { value: "" } }, [
-                                    _vm._v("Selecione a categoria pai")
-                                  ]),
-                                  _vm._v(" "),
-                                  _vm._l(_vm.categories.categories, function(
-                                    category
-                                  ) {
-                                    return _c(
-                                      "option",
-                                      {
-                                        key: category.id,
-                                        domProps: { value: category.id }
-                                      },
-                                      [_vm._v(_vm._s(category.name))]
-                                    )
-                                  })
-                                ],
-                                2
+                                _vm._l(_vm.categories.categories, function(
+                                  category
+                                ) {
+                                  return _c(
+                                    "option",
+                                    {
+                                      key: category.id,
+                                      domProps: { value: category.id }
+                                    },
+                                    [_vm._v(_vm._s(category.name))]
+                                  )
+                                }),
+                                0
                               ),
                               _vm._v(" "),
                               _c("has-error", {

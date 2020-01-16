@@ -8,12 +8,8 @@
             <h3 class="card-title">Categorias</h3>
 
             <div class="card-tools">
-              <button
-                type="button"
-                class="btn btn-block btn-primary btn-sm"
-                @click="newCategoryModal()"
-              >
-                Adicionar categoria
+              <button type="button" class="btn btn-primary" @click="newCategoryModal()">
+                Adicionar
                 <i class="fas fa-plus-circle"></i>
               </button>
             </div>
@@ -24,73 +20,48 @@
               v-for="category in categories.categories"
               :key="category.id"
             >
-              <li>
-                <div @mouseover="active = true" @mouseleave="active = false">
+              <li @mouseover="category.active = true" @mouseleave="category.active = false">
+                <div>
                   <div v-bind:style="category.color | Color"></div>
                   <p>{{ category.name }}</p>
-                  <a href="#" @click="newCategoryModal(category)">
-                    Editar
-                    <i class="fa fa-edit"></i>
-                  </a>
-                  <a v-show="active" href="#" @click="deleteCategory(category.id)">
-                    Excluir
-                    <i class="fa fa-trash"></i>
-                  </a>
+                  <div :class="{ inactive: !category.active }">
+                    <a class="text-info" href="#" @click="newCategoryModal(category)">
+                      editar
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <a class="text-danger" href="#" @click="deleteCategory(category.id)">
+                      excluir
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </div>
                 </div>
               </li>
 
-              <ul v-for="subcategory in categories.subcategories" :key="subcategory.id">
-                <li v-if="category.id == subcategory.parent_id">
+              <ul
+                id="ul-list-subcategories"
+                v-for="subcategory in categories.subcategories"
+                :key="subcategory.id"
+              >
+                <li
+                  @mouseover="subcategory.active = true"
+                  @mouseleave="subcategory.active = false"
+                  v-if="category.id == subcategory.parent_id"
+                >
                   <p>{{ subcategory.name }}</p>
-                  <a href="#" @click="newCategoryModal(subcategory)">
-                    Editar subcategoria
-                    <i class="fa fa-edit"></i>
-                  </a>
-                  <a href="#" @click="deleteCategory(subcategory.id)">
-                    Excluir subcategoria
-                    <i class="fa fa-trash"></i>
-                  </a>
+                  <div :class="{ inactive: !subcategory.active }">
+                    <a class="text-info" href="#" @click="newCategoryModal(subcategory)">
+                      editar
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <a class="text-danger" href="#" @click="deleteCategory(subcategory.id)">
+                      excluir
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </div>
                 </li>
               </ul>
               <hr />
             </ul>
-            <!-- data.categories.forEach(category => {
-            console.log(category.id, category.name);
-            data.subcategories.forEach(subcategory => {
-              // console.log(subcategory.id);
-              // console.log(category.parent_id);
-              if (category.id == subcategory.parent_id) {
-                console.log("- - " + subcategory.id, subcategory.name);
-              }
-            });
-            });-->
-            <!-- <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nome</th>
-                  <th>Cor</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="category in categories.data" :key="category.id">
-                  <td>{{ category.id }}</td>
-                  <td>{{ category.name }}</td>
-                  <td>
-                    <div v-bind:style="category.color | Color"></div>
-                  </td>
-                  <td>
-                    <a href="#" class="btn btn-primary btn-sm" @click="newCategoryModal(category)">
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <a href="#" @click="deleteCategory(category.id)" class="btn btn-danger btn-sm">
-                      <i class="fa fa-trash"></i>
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>-->
           </div>
           <div class="card-footer">
             <pagination :data="categories" @pagination-change-page="getResults"></pagination>
@@ -165,15 +136,12 @@
               </div>
               <div v-if="!mainCategory" class="form-group">
                 <select
+                  required
                   v-model="form.parentCategory"
                   name="parentCategory"
                   class="form-control"
-                  :class="{
-                                        'is-invalid': form.errors.has('parentCategory')
-                                    }"
+                  :class="{'is-invalid': form.errors.has('parentCategory')}"
                 >
-                  <option value>Selecione a categoria pai</option>
-
                   <option
                     v-for="category in categories.categories"
                     :value="category.id"
@@ -203,7 +171,7 @@ export default {
       editMode: false,
       categories: {},
       mainCategory: true,
-      active: false,
+      // active: false,
       form: new Form({
         id: "",
         name: "",
@@ -214,13 +182,6 @@ export default {
   },
 
   methods: {
-    // mouseOver: function() {
-    //   this.active = true;
-    // },
-    // mouseLeave: function() {
-    //   this.active = false;
-    // },
-
     getResults(page = 1) {
       axios.get("api/categories?page=" + page).then(response => {
         this.categories = response.data;
@@ -242,15 +203,12 @@ export default {
         await axios.get("api/category").then(({ data }) => {
           this.categories = data;
 
-          data.categories.forEach(category => {
-            console.log(category.id, category.name);
-            data.subcategories.forEach(subcategory => {
-              // console.log(subcategory.id);
-              // console.log(category.parent_id);
-              if (category.id == subcategory.parent_id) {
-                console.log("- - " + subcategory.id, subcategory.name);
-              }
-            });
+          this.categories.categories.forEach(category => {
+            this.$set(category, "active", false);
+          });
+
+          this.categories.subcategories.forEach(subcategory => {
+            this.$set(subcategory, "active", false);
           });
         });
       }
@@ -263,8 +221,19 @@ export default {
         this.editMode = false;
         this.form.reset();
         this.form.color = "#1CA085";
+        this.mainCategory
+          ? (this.form.parentCategory = 0)
+          : (this.form.parentCategory = 1);
       } else {
         this.editMode = true;
+
+        if (category.parent_id !== 0) {
+          this.mainCategory = false;
+          category.parentCategory = category.parent_id;
+        } else {
+          this.mainCategory = true;
+        }
+
         this.form.fill(category);
       }
       $("#newCategoryModal").modal("show");
@@ -275,7 +244,7 @@ export default {
       await this.form
         .post("/api/category")
         .then(() => {
-          Fire.$emit("UpdateCategoriesTable");
+          Fire.$emit("RefreshCategoriesTable");
           $("#newCategoryModal").modal("hide");
 
           Toast.fire({
@@ -299,7 +268,7 @@ export default {
       this.form
         .put("api/category/" + this.form.id)
         .then(() => {
-          Fire.$emit("UpdateCategoriesTable");
+          Fire.$emit("RefreshCategoriesTable");
           $("#newCategoryModal").modal("hide");
 
           Toast.fire({
@@ -337,7 +306,7 @@ export default {
                 icon: "success",
                 title: "Categoria excluída com sucesso"
               });
-              Fire.$emit("UpdateCategoriesTable");
+              Fire.$emit("RefreshCategoriesTable");
               this.$Progress.finish();
             })
             .catch(e => {
@@ -361,7 +330,7 @@ export default {
 
     this.loadCategories();
 
-    Fire.$on("UpdateCategoriesTable", () => {
+    Fire.$on("RefreshCategoriesTable", () => {
       this.loadCategories();
     });
 
