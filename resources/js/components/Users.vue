@@ -202,7 +202,7 @@ export default {
       await this.form
         .post("/api/user")
         .then(() => {
-          Fire.$emit("UpdateUsersTable");
+          Fire.$emit("RefreshUsersTable");
           $("#newUserModal").modal("hide");
 
           Toast.fire({
@@ -223,7 +223,7 @@ export default {
       this.form
         .put("api/user/" + this.form.id)
         .then(() => {
-          Fire.$emit("UpdateUsersTable");
+          Fire.$emit("RefreshUsersTable");
           $("#newUserModal").modal("hide");
 
           Toast.fire({
@@ -261,14 +261,14 @@ export default {
                 icon: "success",
                 title: "Usuário excluído com sucesso"
               });
-              Fire.$emit("UpdateUsersTable");
+              Fire.$emit("RefreshUsersTable");
               this.$Progress.finish();
             })
             .catch(e => {
               swal.fire({
                 icon: "error",
                 title: "Erro ao excluir o usuário",
-                text: "Você não possui permissão para exluir usuários"
+                text: "Você não possui permissão para excluir usuários"
               });
               this.$Progress.fail();
             });
@@ -285,7 +285,7 @@ export default {
 
     this.loadUsers();
 
-    Fire.$on("UpdateUsersTable", () => {
+    Fire.$on("RefreshUsersTable", () => {
       this.loadUsers();
     });
     this.$Progress.finish();

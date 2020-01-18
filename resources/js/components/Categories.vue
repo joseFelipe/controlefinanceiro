@@ -5,6 +5,10 @@
       <div class="col-md-12">
         <div class="header-container">
           <span>Categorias</span>
+          <button type="button" class="btn btn-primary btn-sm" @click="newCategoryModal()">
+            Adicionar
+            <i class="fas fa-plus-circle"></i>
+          </button>
         </div>
         <div class="table">
           <ul id="ul-list-categories" v-for="category in categories.categories" :key="category.id">

@@ -65,6 +65,12 @@
                                 <p>Dashboard</p>
                             </router-link>
                         </li>
+                        <li class="nav-item">
+                            <router-link to="/transactions" class="nav-link" active-class="active" exact>
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>Lançamentos</p>
+                            </router-link>
+                        </li>
                         @can("isAdminOrAuthor")
                         <li class="nav-item">
                             <router-link to="/config" class="nav-link" active-class="active" exact>

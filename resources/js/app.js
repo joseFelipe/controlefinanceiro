@@ -62,6 +62,10 @@ const routes = [
     component: require("./components/Dashboard.vue").default
   },
   {
+    path: "/transactions",
+    component: require("./components/Transactions.vue").default
+  },
+  {
     path: "/profile",
     component: require("./components/Profile.vue").default
   },
