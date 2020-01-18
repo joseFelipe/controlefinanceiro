@@ -26,7 +26,7 @@ class UserController extends Controller
     public function index()
     {
         if (FacadesGate::allows('isAdmin') || FacadesGate::allows('isAuthor')) {
-            return User::latest()->paginate(10);
+            return User::latest()->orderby('id', 'desc')->paginate(6);
         }
     }
 

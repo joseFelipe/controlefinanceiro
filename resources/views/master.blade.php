@@ -66,46 +66,14 @@
                             </router-link>
                         </li>
                         @can("isAdminOrAuthor")
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-cog"></i>
-                                <p>
-                                    Gerenciar
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview" active-class="active" exact>
-                                <li class="nav-item">
-                                    <router-link to="/users" class="nav-link" active-class="active" exact>
-                                        <i class="fas fa-users nav-icon"></i>
-                                        <p>Usuários</p>
-                                    </router-link>
-                                </li>
-                            </ul>
-                            <ul class="nav nav-treeview" active-class="active" exact>
-                                <li class="nav-item">
-                                    <router-link to="/accounts" class="nav-link" active-class="active" exact>
-                                        <i class="fas fa-landmark nav-icon"></i>
-                                        <p>Contas</p>
-                                    </router-link>
-                                </li>
-                            </ul>
-                            <ul class="nav nav-treeview" active-class="active" exact>
-                                <li class="nav-item">
-                                    <router-link to="/categories" class="nav-link" active-class="active" exact>
-                                        <i class="fas fa-tags nav-icon"></i>
-                                        <p>Categorias</p>
-                                    </router-link>
-                                </li>
-                            </ul>
-                        </li>
-                        @endcan
                         <li class="nav-item">
-                            <router-link to="/profile" class="nav-link" active-class="active" exact>
-                                <i class="nav-icon fas fa-user-alt"></i>
-                                <p>Perfil</p>
+                            <router-link to="/config" class="nav-link" active-class="active" exact>
+                                <i class="nav-icon fas fa-cog"></i>
+                                <p>Configurações</p>
                             </router-link>
                         </li>
+                        @endcan
+                        
                         @can("isAdmin")
                         <li class="nav-item">
                             <router-link to="/developer" class="nav-link" active-class="active" exact>

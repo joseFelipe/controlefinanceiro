@@ -3,53 +3,43 @@
     <not-found v-if="!$gate.isAdminOrAuthor()"></not-found>
     <div class="row">
       <div class="col-md-12">
-        <div class="card mt-5" v-if="$gate.isAdminOrAuthor()">
-          <div class="card-header">
-            <h3 class="card-title">Contas</h3>
-
-            <div class="card-tools">
-              <button
-                type="button"
-                class="btn btn-block btn-primary btn-sm"
-                @click="newAccountModal()"
-              >
-                Adicionar conta
-                <i class="fas fa-plus-circle"></i>
-              </button>
-            </div>
-          </div>
-          <div class="card-body table-responsive p-0">
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nome</th>
-                  <th>Tipo</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="account in accounts.data" :key="account.id">
-                  <td>{{ account.id }}</td>
-                  <td>{{ account.name }}</td>
-                  <td>{{ account.type | accountType }}</td>
-
-                  <td>
-                    <a href="#" class="btn btn-primary btn-sm" @click="newAccountModal(account)">
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <a href="#" @click="deleteAccount(account.id)" class="btn btn-danger btn-sm">
-                      <i class="fa fa-trash"></i>
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="card-footer">
-            <pagination :data="accounts" @pagination-change-page="getResults"></pagination>
-          </div>
+        <div class="header-container">
+          <span>Contas</span>
+          <button type="button" class="btn btn-primary btn-sm" @click="newAccountModal()">
+            Adicionar conta
+            <i class="fas fa-plus-circle"></i>
+          </button>
         </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="account in accounts.data" :key="account.id">
+              <td>{{ account.id }}</td>
+              <td>{{ account.name }}</td>
+              <td>{{ account.type | accountType }}</td>
+
+              <td>
+                <a href="#" class="btn btn-primary btn-sm" @click="newAccountModal(account)">
+                  <i class="fa fa-edit"></i>
+                </a>
+                <a href="#" @click="deleteAccount(account.id)" class="btn btn-danger btn-sm">
+                  <i class="fa fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <pagination :data="accounts" @pagination-change-page="getResults"></pagination>
+          </tfoot>
+        </table>
       </div>
     </div>
 

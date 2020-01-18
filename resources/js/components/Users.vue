@@ -3,57 +3,47 @@
     <not-found v-if="!$gate.isAdminOrAuthor()"></not-found>
     <div class="row">
       <div class="col-12">
-        <div class="card mt-5" v-if="$gate.isAdminOrAuthor()">
-          <div class="card-header">
-            <h3 class="card-title">Usuários</h3>
-
-            <div class="card-tools">
-              <button
-                type="button"
-                class="btn btn-block btn-primary btn-sm"
-                @click="newUserModal()"
-              >
-                Adicionar usuário
-                <i class="fa fa-user-plus"></i>
-              </button>
-            </div>
-          </div>
-          <div class="card-body table-responsive p-0">
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nome</th>
-                  <th>Email</th>
-                  <th>Data cadastro</th>
-                  <th>Tipo</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="user in users.data" :key="user.id">
-                  <td>{{ user.id }}</td>
-                  <td>{{ user.name }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.created_at | date_formatted }}</td>
-                  <td>{{ user.type | upText }}</td>
-
-                  <td>
-                    <a href="#" class="btn btn-primary btn-sm" @click="newUserModal(user)">
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <a href="#" @click="deleteUser(user.id)" class="btn btn-danger btn-sm">
-                      <i class="fa fa-trash"></i>
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="card-footer">
-            <pagination :data="users" @pagination-change-page="getResults"></pagination>
-          </div>
+        <div class="header-container">
+          <span>Usuários</span>
+          <button type="button" class="btn btn-primary btn-sm" @click="newUserModal()">
+            Adicionar usuário
+            <i class="fa fa-user-plus"></i>
+          </button>
         </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Tipo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="user in users.data" :key="user.id">
+              <td>{{ user.id }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.type | upText }}</td>
+
+              <td class="actions-button">
+                <a class="text-info" href="#" @click="newUserModal(user)">
+                  editar
+                  <i class="fa fa-edit"></i>
+                </a>
+                <a class="text-danger" href="#" @click="deleteUser(user.id)">
+                  excluir
+                  <i class="fa fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <pagination :data="users" @pagination-change-page="getResults"></pagination>
+          </tfoot>
+        </table>
+        <!-- </div> -->
       </div>
     </div>
 

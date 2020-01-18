@@ -66,6 +66,10 @@ const routes = [
     component: require("./components/Profile.vue").default
   },
   {
+    path: "/config",
+    component: require("./components/Config.vue").default
+  },
+  {
     path: "/developer",
     component: require("./components/Developer.vue").default
   },

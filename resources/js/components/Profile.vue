@@ -1,9 +1,4 @@
 <style>
-.widget-user-header {
-  background-position: center center;
-  background-size: cover;
-}
-
 .widget-user-image {
   left: 50%;
   margin-left: -45px;
@@ -14,9 +9,9 @@
 
 <template>
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-12">
-        <div class="card card-widget widget-user mt-5">
+    <div class="row">
+      <div class="col-12 container-profile">
+        <div class="card card-widget widget-user">
           <div class="widget-user-header" style="background: url(./img/user-cover.jpg)"></div>
           <div class="widget-user-image">
             <img class="img-circle" :src="getProfilePhoto()" alt="User Avatar" />

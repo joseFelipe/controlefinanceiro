@@ -53,3 +53,62 @@
 #ul-list-subcategories li {
   padding-bottom: 0.2rem;
 }
+
+.container-config {
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.container-content-config {
+  padding-left: 0px;
+  padding-right: 0px;
+  background-color: #fff;
+}
+
+.tabs-config {
+  padding-right: 0px;
+}
+
+.nav-tabs .nav-link {
+  border: 0px solid transparent;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+  background-color: #f4f6f9;
+}
+
+.nav-tabs.flex-column .nav-link {
+  border-radius: 0px;
+}
+
+.nav-tabs.flex-column {
+  border: 0px;
+}
+
+.header-container {
+  min-height: 10%;
+}
+
+.header-container button {
+  float: right;
+  margin: 15px 0px 15px 0px;
+}
+
+.header-container span {
+  float: left;
+  font-size: 18px;
+  margin: 15px 0px 15px 0px;
+}
+
+.container-profile {
+  padding-top: 15px;
+}
+
+.actions-button a {
+  font-size: 13px;
+  margin: 0px 10px 0px 10px !important;
+  text-decoration: none;
+}

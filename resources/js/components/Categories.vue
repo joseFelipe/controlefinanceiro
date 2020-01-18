@@ -3,74 +3,60 @@
     <not-found v-if="!$gate.isAdminOrAuthor()"></not-found>
     <div class="row">
       <div class="col-md-12">
-        <div class="card mt-5" v-if="$gate.isAdminOrAuthor()">
-          <div class="card-header">
-            <h3 class="card-title">Categorias</h3>
+        <div class="header-container">
+          <span>Categorias</span>
+        </div>
+        <div class="table">
+          <ul id="ul-list-categories" v-for="category in categories.categories" :key="category.id">
+            <li @mouseover="category.active = true" @mouseleave="category.active = false">
+              <div>
+                <div v-bind:style="category.color | Color"></div>
+                <p>{{ category.name }}</p>
+                <div :class="{ inactive: !category.active }">
+                  <a class="text-info" href="#" @click="newCategoryModal(category)">
+                    editar
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a class="text-danger" href="#" @click="deleteCategory(category.id)">
+                    excluir
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </div>
+              </div>
+            </li>
 
-            <div class="card-tools">
-              <button type="button" class="btn btn-primary" @click="newCategoryModal()">
-                Adicionar
-                <i class="fas fa-plus-circle"></i>
-              </button>
-            </div>
-          </div>
-          <div class="card-body">
             <ul
-              id="ul-list-categories"
-              v-for="category in categories.categories"
-              :key="category.id"
+              id="ul-list-subcategories"
+              v-for="subcategory in categories.subcategories"
+              :key="subcategory.id"
             >
-              <li @mouseover="category.active = true" @mouseleave="category.active = false">
-                <div>
-                  <div v-bind:style="category.color | Color"></div>
-                  <p>{{ category.name }}</p>
-                  <div :class="{ inactive: !category.active }">
-                    <a class="text-info" href="#" @click="newCategoryModal(category)">
-                      editar
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <a class="text-danger" href="#" @click="deleteCategory(category.id)">
-                      excluir
-                      <i class="fa fa-trash"></i>
-                    </a>
-                  </div>
+              <li
+                @mouseover="subcategory.active = true"
+                @mouseleave="subcategory.active = false"
+                v-if="category.id == subcategory.parent_id"
+              >
+                <p>{{ subcategory.name }}</p>
+                <div :class="{ inactive: !subcategory.active }">
+                  <a class="text-info" href="#" @click="newCategoryModal(subcategory)">
+                    editar
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a class="text-danger" href="#" @click="deleteCategory(subcategory.id)">
+                    excluir
+                    <i class="fa fa-trash"></i>
+                  </a>
                 </div>
               </li>
-
-              <ul
-                id="ul-list-subcategories"
-                v-for="subcategory in categories.subcategories"
-                :key="subcategory.id"
-              >
-                <li
-                  @mouseover="subcategory.active = true"
-                  @mouseleave="subcategory.active = false"
-                  v-if="category.id == subcategory.parent_id"
-                >
-                  <p>{{ subcategory.name }}</p>
-                  <div :class="{ inactive: !subcategory.active }">
-                    <a class="text-info" href="#" @click="newCategoryModal(subcategory)">
-                      editar
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <a class="text-danger" href="#" @click="deleteCategory(subcategory.id)">
-                      excluir
-                      <i class="fa fa-trash"></i>
-                    </a>
-                  </div>
-                </li>
-              </ul>
-              <hr />
             </ul>
-          </div>
-          <div class="card-footer">
-            <pagination :data="categories" @pagination-change-page="getResults"></pagination>
-          </div>
+            <hr />
+          </ul>
+        </div>
+        <div class="card-footer">
+          <pagination :data="categories" @pagination-change-page="getResults"></pagination>
         </div>
       </div>
     </div>
 
-    <!-- Modal -->
     <div class="modal fade" id="newCategoryModal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
