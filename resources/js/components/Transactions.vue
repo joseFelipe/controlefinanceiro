@@ -10,20 +10,20 @@
             class="btn btn-secondary btn-sm"
             @click="newTransactionModal(transfer)"
           >
-            nova transferência
             <i class="fas fa-exchange-alt"></i>
+            Nova transferência
           </button>
           <button
             type="button"
             class="btn btn-success btn-sm"
             @click="newTransactionModal(incoming)"
           >
-            nova receita
-            <i class="fas fa-plus"></i>
+            <i class="fas fa-plus-circle"></i>
+            Nova receita
           </button>
           <button type="button" class="btn btn-danger btn-sm" @click="newTransactionModal(expense)">
-            nova despesa
-            <i class="fas fa-minus"></i>
+            <i class="fas fa-minus-circle"></i>
+            Nova despesa
           </button>
         </div>
         <table class="table">
@@ -38,31 +38,12 @@
             </tr>
           </thead>
           <tbody>
-            <!-- <tr v-for="transaction in transactions.data" :key="transaction.id"> -->
-            <tr>
-              <td>Almoço celeiro</td>
-              <td>R$ 25,90</td>
-              <td>16/01/20</td>
-              <td>Viacredi</td>
-              <td>Alimentação</td>
-
-              <td class="actions-button">
-                <a class="text-info" href="#" @click="newTransactionModal(transaction)">
-                  editar
-                  <i class="fa fa-edit"></i>
-                </a>
-                <a class="text-danger" href="#" @click="deleteTransaction(transaction.id)">
-                  excluir
-                  <i class="fa fa-trash"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Estacionamento shopping</td>
-              <td>R$ 8,00</td>
-              <td>09/01/20</td>
-              <td>Nubank</td>
-              <td>Estacionamento</td>
+            <tr v-for="transaction in transactions" :key="transaction.id">
+              <td>{{ transaction.description }}</td>
+              <td>{{ transaction.value }}</td>
+              <td>{{ transaction.date | date_formatted }}</td>
+              <td>{{ transaction.account }}</td>
+              <td>{{ transaction.category }}</td>
 
               <td class="actions-button">
                 <a class="text-info" href="#" @click="newTransactionModal(transaction)">
@@ -77,7 +58,7 @@
             </tr>
           </tbody>
           <tfoot>
-            <pagination :data="transactions" @pagination-change-page="getResults"></pagination>
+            <!-- <pagination :data="transactions" @pagination-change-page="getResults"></pagination> -->
           </tfoot>
         </table>
         <!-- </div> -->
@@ -109,7 +90,6 @@
                     v-model="transactionType"
                   />
                   <label for="expense">despesa</label>
-                  <br />
                   <input
                     type="radio"
                     name="incoming"
@@ -118,7 +98,6 @@
                     v-model="transactionType"
                   />
                   <label for="incoming">receita</label>
-                  <br />
                   <input
                     type="radio"
                     name="transfer"
@@ -127,10 +106,10 @@
                     v-model="transactionType"
                   />
                   <label for="incoming">transferência</label>
-                  <br />
                 </div>
               </div>
               <div class="form-group">
+                <label for="description">Descrição</label>
                 <input
                   v-model="form.description"
                   type="text"
@@ -146,6 +125,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
+                    <label for="value">Valor</label>
                     <input
                       v-model="form.value"
                       type="value"
@@ -162,6 +142,7 @@
 
                 <div class="col-sm-6">
                   <div class="form-group">
+                    <label for="date">Data</label>
                     <input
                       v-model="form.date"
                       type="date"
@@ -177,27 +158,9 @@
                 </div>
               </div>
               <div class="row">
-                <!-- <div class="col-sm-6">
-                  <div class="form-group">
-                    <select
-                      required
-                      v-model="form.category"
-                      name="category"
-                      class="form-control"
-                      :class="{'is-invalid': form.errors.has('category')}"
-                    >
-                      <option
-                        v-for="category in categories.categories"
-                        :value="category.id"
-                        :key="category.id"
-                      >{{ category.name}}</option>
-                    </select>
-                    <has-error :form="form" field="category"></has-error>
-                  </div>
-                </div>
-
                 <div class="col-sm-6">
                   <div class="form-group">
+                    <label for="account">Conta</label>
                     <select
                       required
                       v-model="form.account"
@@ -209,11 +172,32 @@
                         v-for="account in accounts"
                         :value="account.id"
                         :key="account.id"
-                      >{{ account.name}}</option>
+                      >{{ account.name }}</option>
                     </select>
                     <has-error :form="form" field="account"></has-error>
                   </div>
-                </div>-->
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="category">Categoria</label>
+                    <select
+                      required
+                      v-model="form.category"
+                      name="category"
+                      class="form-control"
+                      :class="{'is-invalid': form.errors.has('category')}"
+                    >
+                      <option
+                        v-for="category in categories"
+                        :value="category.id"
+                        :key="category.id"
+                      >
+                        <span>{{ category.name }}</span>
+                      </option>
+                    </select>
+                    <has-error :form="form" field="category"></has-error>
+                  </div>
+                </div>
               </div>
               <div class="form-group">
                 <textarea
@@ -226,38 +210,6 @@
                                     }"
                 />
                 <has-error :form="form" field="note"></has-error>
-              </div>
-              <div class="form-group">
-                <select
-                  v-model="form.type"
-                  name="type"
-                  placeholder="type"
-                  class="form-control"
-                  :class="{
-                                        'is-invalid': form.errors.has('type')
-                                    }"
-                >
-                  <option value>Selecione um perfil de usuário</option>
-                  <option value="admin">Administrador</option>
-                  <option value="user">Usuário Padrão</option>
-                  <option value="author">Autor</option>
-                </select>
-                <has-error :form="form" field="type"></has-error>
-              </div>
-              <div class="form-group">
-                <input
-                  v-model="form.password"
-                  type="password"
-                  name="password"
-                  placeholder="Senha"
-                  class="form-control"
-                  :class="{
-                                        'is-invalid': form.errors.has(
-                                            'password'
-                                        )
-                                    }"
-                />
-                <has-error :form="form" field="password"></has-error>
               </div>
             </div>
             <div class="modal-footer">
@@ -277,6 +229,8 @@ export default {
     return {
       editMode: false,
       transactions: {},
+      categoriesNew: [],
+      subCategoriesNew: [],
       categories: {},
       accounts: {},
       transactionType: "",
@@ -300,6 +254,26 @@ export default {
       });
     },
 
+    async loadTransactions(search = false) {
+      //Verify if the current user is admin
+      if (!this.$gate.isAdminOrAuthor()) {
+        return false;
+      }
+      this.$Progress.start();
+
+      if (search) {
+        await axios
+          .get("api/findCategory?q=" + this.$parent.search)
+          .then(({ data }) => (this.transactions = data));
+      } else {
+        await axios.get("api/transaction").then(({ data }) => {
+          this.transactions = data;
+        });
+      }
+
+      this.$Progress.finish();
+    },
+
     async loadCategories(search = false) {
       //Verify if the current user is admin
       if (!this.$gate.isAdminOrAuthor()) {
@@ -312,16 +286,20 @@ export default {
           .get("api/findCategory?q=" + this.$parent.search)
           .then(({ data }) => (this.categories = data));
       } else {
-        await axios.get("api/category").then(({ data }) => {
-          this.categories = data;
+        await axios.get("api/getCategories").then(({ data }) => {
+          this.categories = data.categories;
 
-          this.categories.categories.forEach(category => {
-            this.$set(category, "active", false);
-          });
+          // this.categories.forEach(category => {
+          //   if (category.parent_id == 0)
+          //     console.log(category.id, category.name);
 
-          this.categories.subcategories.forEach(subcategory => {
-            this.$set(subcategory, "active", false);
-          });
+          //   this.categories.forEach(subcategory => {
+          //     if (subcategory.parent_id != 0)
+          //       if (category.id == subcategory.parent_id) {
+          //         console.log("  - " + subcategory.name);
+          //       }
+          //   });
+          // });
         });
       }
 
@@ -342,7 +320,7 @@ export default {
       } else {
         await axios
           .get("api/account")
-          .then(({ data }) => (this.accounts = data));
+          .then(({ data }) => (this.accounts = data.data));
       }
 
       this.$Progress.finish();
@@ -357,84 +335,103 @@ export default {
       //   this.form.fill(transactionType);
       // }
       $("#newTransactionModal").modal("show");
-    },
+    }
 
-    async createUser() {
-      this.$Progress.start();
-      await this.form
-        .post("/api/user")
-        .then(() => {
-          Fire.$emit("RefreshTransactionsTable");
-          $("#newTransactionModal").modal("hide");
+    // async createUser() {
+    //   this.$Progress.start();
+    //   await this.form
+    //     .post("/api/user")
+    //     .then(() => {
+    //       Fire.$emit("RefreshTransactionsTable");
+    //       $("#newTransactionModal").modal("hide");
 
-          Toast.fire({
-            icon: "success",
-            title: "Usuário criado com sucesso"
-          });
-          this.$Progress.finish();
-        })
-        .catch(() => {
-          console.log("Erro ao criar usuário");
-          this.$Progress.fail();
+    //       Toast.fire({
+    //         icon: "success",
+    //         title: "Usuário criado com sucesso"
+    //       });
+    //       this.$Progress.finish();
+    //     })
+    //     .catch(() => {
+    //       console.log("Erro ao criar usuário");
+    //       this.$Progress.fail();
+    //     });
+    // },
+
+    // async updateUser(id) {
+    //   this.$Progress.start();
+
+    //   this.form
+    //     .put("api/user/" + this.form.id)
+    //     .then(() => {
+    //       Fire.$emit("RefreshTransactionsTable");
+    //       $("#newTransactionModal").modal("hide");
+
+    //       Toast.fire({
+    //         icon: "success",
+    //         title: "Usuário alterado com sucesso"
+    //       });
+    //       this.$Progress.finish();
+    //     })
+    //     .catch(() => {
+    //       this.$Progress.fail();
+    //     });
+    // },
+
+    // async deleteUser(id) {
+    //   this.$Progress.start();
+    //   await swal
+    //     .fire({
+    //       title: "Tem certeza que deseja excluir?",
+    //       icon: "warning",
+    //       showCancelButton: true,
+    //       confirmButtonColor: "#3085d6",
+    //       cancelButtonColor: "#d33",
+    //       confirmButtonText: "Sim",
+    //       cancelButtonText: "Cancelar"
+    //     })
+    //     .then(result => {
+    //       if (result.dismiss) {
+    //         return false;
+    //       }
+
+    //       this.form
+    //         .delete("/api/user/" + id)
+    //         .then(() => {
+    //           Toast.fire({
+    //             icon: "success",
+    //             title: "Usuário excluído com sucesso"
+    //           });
+    //           Fire.$emit("RefreshTransactionsTable");
+    //           this.$Progress.finish();
+    //         })
+    //         .catch(e => {
+    //           swal.fire({
+    //             icon: "error",
+    //             title: "Erro ao excluir o usuário",
+    //             text: "Você não possui permissão para excluir usuários"
+    //           });
+    //           this.$Progress.fail();
+    //         });
+    //     });
+    // }
+  },
+
+  computed: {
+    categoriesComputed: function() {
+      this.categories.forEach(category => {
+        console.log(category.id, category.name);
+        this.categoriesNew.push(category);
+
+        this.categories.forEach(subcategory => {
+          if (subcategory.parent_id != 0)
+            if (category.id == subcategory.parent_id) {
+              console.log("- " + subcategory.name);
+              this.subcategoriesNew.push(subcategory);
+            }
         });
-    },
+      });
 
-    async updateUser(id) {
-      this.$Progress.start();
-
-      this.form
-        .put("api/user/" + this.form.id)
-        .then(() => {
-          Fire.$emit("RefreshTransactionsTable");
-          $("#newTransactionModal").modal("hide");
-
-          Toast.fire({
-            icon: "success",
-            title: "Usuário alterado com sucesso"
-          });
-          this.$Progress.finish();
-        })
-        .catch(() => {
-          this.$Progress.fail();
-        });
-    },
-
-    async deleteUser(id) {
-      this.$Progress.start();
-      await swal
-        .fire({
-          title: "Tem certeza que deseja excluir?",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Sim",
-          cancelButtonText: "Cancelar"
-        })
-        .then(result => {
-          if (result.dismiss) {
-            return false;
-          }
-
-          this.form
-            .delete("/api/user/" + id)
-            .then(() => {
-              Toast.fire({
-                icon: "success",
-                title: "Usuário excluído com sucesso"
-              });
-              Fire.$emit("RefreshTransactionsTable");
-              this.$Progress.finish();
-            })
-            .catch(e => {
-              swal.fire({
-                icon: "error",
-                title: "Erro ao excluir o usuário",
-                text: "Você não possui permissão para excluir usuários"
-              });
-              this.$Progress.fail();
-            });
-        });
+      return this.categories;
     }
   },
 
@@ -442,15 +439,17 @@ export default {
     this.$Progress.start();
 
     Fire.$on("search", () => {
-      this.loadUsers(true);
+      this.loadTransactions(true);
     });
 
+    this.loadTransactions();
     this.loadCategories();
     this.loadAccounts();
 
     Fire.$on("RefreshTransactionsTable", () => {
-      this.loadUsers();
+      this.loadTransactions();
     });
+
     this.$Progress.finish();
     console.log("Component mounted.");
   }

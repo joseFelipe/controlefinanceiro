@@ -2,7 +2,7 @@
   <div class="container">
     <not-found v-if="!$gate.isAdminOrAuthor()"></not-found>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-12">
         <div class="header-container">
           <span>Categorias</span>
           <button type="button" class="btn btn-primary btn-sm" @click="newCategoryModal()">

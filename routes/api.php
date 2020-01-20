@@ -20,7 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::apiResources(["user" => "API\UserController"]);
 Route::apiResources(["account" => "API\AccountController"]);
 Route::apiResources(["category" => "API\CategoryController"]);
+Route::apiResources(["transaction" => "API\TransactionController"]);
 
 Route::get("profile", "API\UserController@profile");
 Route::get("findUser", "API\UserController@search");
+Route::get("getCategories", "API\CategoryController@getCategories");
 Route::put("profile", "API\UserController@updateProfile");

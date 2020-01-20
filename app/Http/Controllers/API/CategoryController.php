@@ -43,6 +43,20 @@ class CategoryController extends Controller
     }
   }
 
+  public function getCategories()
+  {
+    if (FacadesGate::allows('isAdmin') || FacadesGate::allows('isAuthor')) {
+      // return Category::latest()->paginate(10);
+
+      $categories = DB::table('categories')
+        ->select('categories.*')
+        ->orderby('name', 'asc')
+        ->get();
+
+      return ["categories" => $categories];
+    }
+  }
+
   /**
    * Store a newly created resource in storage.
    *
