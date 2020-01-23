@@ -7,9 +7,6 @@ import VueProgressBar from "vue-progressbar";
 import Swal from "sweetalert2";
 import Swatches from "vue-swatches";
 
-// Import the styles too, globally
-import "vue-swatches/dist/vue-swatches.min.css";
-
 import Gate from "./Gate";
 
 Vue.prototype.$gate = new Gate(window.user);

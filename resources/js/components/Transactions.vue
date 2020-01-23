@@ -11,7 +11,7 @@
             @click="newTransactionModal(transfer)"
           >
             <i class="fas fa-exchange-alt"></i>
-            Nova transferência
+            nova transferência
           </button>
           <button
             type="button"
@@ -19,11 +19,15 @@
             @click="newTransactionModal(incoming)"
           >
             <i class="fas fa-plus-circle"></i>
-            Nova receita
+            nova receita
           </button>
-          <button type="button" class="btn btn-danger btn-sm" @click="newTransactionModal(expense)">
+          <button
+            type="button"
+            class="btn btn-danger btn-sm"
+            @click="newTransactionModal(expense)"
+          >
             <i class="fas fa-minus-circle"></i>
-            Nova despesa
+            nova despesa
           </button>
         </div>
         <table class="table">
@@ -46,11 +50,19 @@
               <td>{{ transaction.category }}</td>
 
               <td class="actions-button">
-                <a class="text-info" href="#" @click="newTransactionModal(transaction)">
+                <a
+                  class="text-info"
+                  href="#"
+                  @click="newTransactionModal(transaction)"
+                >
                   editar
                   <i class="fa fa-edit"></i>
                 </a>
-                <a class="text-danger" href="#" @click="deleteTransaction(transaction.id)">
+                <a
+                  class="text-danger"
+                  href="#"
+                  @click="deleteTransaction(transaction.id)"
+                >
                   excluir
                   <i class="fa fa-trash"></i>
                 </a>
@@ -66,7 +78,12 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="newTransactionModal" tabindex="-1" role="dialog">
+    <div
+      class="modal fade"
+      id="newTransactionModal"
+      tabindex="-1"
+      role="dialog"
+    >
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -74,7 +91,12 @@
               <span v-show="!editMode">Novo lançamento</span>
               <span v-show="editMode">Editar lançamento</span>
             </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -117,8 +139,8 @@
                   placeholder="Descrição"
                   class="form-control"
                   :class="{
-                                        'is-invalid': form.errors.has('description')
-                                    }"
+                    'is-invalid': form.errors.has('description')
+                  }"
                 />
                 <has-error :form="form" field="description"></has-error>
               </div>
@@ -133,8 +155,8 @@
                       placeholder="Value (R$)"
                       class="form-control"
                       :class="{
-                                        'is-invalid': form.errors.has('value')
-                                    }"
+                        'is-invalid': form.errors.has('value')
+                      }"
                     />
                     <has-error :form="form" field="value"></has-error>
                   </div>
@@ -150,8 +172,8 @@
                       placeholder="Data"
                       class="form-control"
                       :class="{
-                                        'is-invalid': form.errors.has('date')
-                                    }"
+                        'is-invalid': form.errors.has('date')
+                      }"
                     />
                     <has-error :form="form" field="date"></has-error>
                   </div>
@@ -166,13 +188,14 @@
                       v-model="form.account"
                       name="account"
                       class="form-control"
-                      :class="{'is-invalid': form.errors.has('account')}"
+                      :class="{ 'is-invalid': form.errors.has('account') }"
                     >
                       <option
                         v-for="account in accounts"
                         :value="account.id"
                         :key="account.id"
-                      >{{ account.name }}</option>
+                        >{{ account.name }}</option
+                      >
                     </select>
                     <has-error :form="form" field="account"></has-error>
                   </div>
@@ -185,14 +208,14 @@
                       v-model="form.category"
                       name="category"
                       class="form-control"
-                      :class="{'is-invalid': form.errors.has('category')}"
+                      :class="{ 'is-invalid': form.errors.has('category') }"
                     >
                       <option
                         v-for="category in categories"
                         :value="category.id"
                         :key="category.id"
+                        :label="category.name"
                       >
-                        <span>{{ category.name }}</span>
                       </option>
                     </select>
                     <has-error :form="form" field="category"></has-error>
@@ -206,14 +229,16 @@
                   placeholder="Observação"
                   class="form-control"
                   :class="{
-                                        'is-invalid': form.errors.has('note')
-                                    }"
+                    'is-invalid': form.errors.has('note')
+                  }"
                 />
                 <has-error :form="form" field="note"></has-error>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                Fechar
+              </button>
               <button type="submit" class="btn btn-success">Salvar</button>
             </div>
           </form>
