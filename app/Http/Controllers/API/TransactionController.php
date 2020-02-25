@@ -54,19 +54,27 @@ class TransactionController extends Controller
    */
   public function store(Request $request)
   {
+    // return [
+    //   '- description' => $request['description'],
+    //   '- transactionType' => $request['transactionType'],
+    //   '- value' => $request['value'],
+    //   '- date' => $request['date'],
+    //   '- note' => $request['note'],
+    //   '- type' => $request['type'],
+    //   '- account' => $request['account'],
+    //   '- category' => $request['category']
+    // ];
 
-    // $this->validate($request, [
-    //   'name' => 'required|string|max:100',
-    // ]);
-
-    // $category = new Category;
-
-    // $category->name = $request["name"];
-    // $category->color = $request["color"];
-    // $category->parent_id = $request["parentCategory"];
-    // $category->save();
-
-    // return ["message" => "subcategory success"];
+    return Transaction::create([
+      'description' => $request['description'],
+      'value' => $request['value'],
+      'date' => $request['date'],
+      'note' => $request['note'],
+      'type' => $request['type'],
+      'account_origin_id' => $request['account_origin'],
+      'account_destiny_id' => $request['account_destiny'],
+      'category_id' => $request['category']
+    ]);
   }
 
   /**

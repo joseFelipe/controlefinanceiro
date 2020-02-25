@@ -8,7 +8,7 @@
           <button
             type="button"
             class="btn btn-secondary btn-sm"
-            @click="newTransactionModal(transfer)"
+            @click="newTransactionModal('transfer')"
           >
             <i class="fas fa-exchange-alt"></i>
             nova transferência
@@ -16,7 +16,7 @@
           <button
             type="button"
             class="btn btn-success btn-sm"
-            @click="newTransactionModal(incoming)"
+            @click="newTransactionModal('incoming')"
           >
             <i class="fas fa-plus-circle"></i>
             nova receita
@@ -24,7 +24,7 @@
           <button
             type="button"
             class="btn btn-danger btn-sm"
-            @click="newTransactionModal(expense)"
+            @click="newTransactionModal('expense')"
           >
             <i class="fas fa-minus-circle"></i>
             nova despesa
@@ -33,6 +33,7 @@
         <table class="table">
           <thead>
             <tr>
+              <th>Tipo</th>
               <th>Descrição</th>
               <th>Valor</th>
               <th>Data</th>
@@ -43,6 +44,9 @@
           </thead>
           <tbody>
             <tr v-for="transaction in transactions" :key="transaction.id">
+              <td>
+                <div v-bind:style="transaction.type | TypeBadge"></div>
+              </td>
               <td>{{ transaction.description }}</td>
               <td>{{ transaction.value }}</td>
               <td>{{ transaction.date | date_formatted }}</td>
@@ -50,19 +54,11 @@
               <td>{{ transaction.category }}</td>
 
               <td class="actions-button">
-                <a
-                  class="text-info"
-                  href="#"
-                  @click="newTransactionModal(transaction)"
-                >
+                <a class="text-info" href="#" @click="newTransactionModal(transaction)">
                   editar
                   <i class="fa fa-edit"></i>
                 </a>
-                <a
-                  class="text-danger"
-                  href="#"
-                  @click="deleteTransaction(transaction.id)"
-                >
+                <a class="text-danger" href="#" @click="deleteTransaction(transaction.id)">
                   excluir
                   <i class="fa fa-trash"></i>
                 </a>
@@ -78,58 +74,20 @@
     </div>
 
     <!-- Modal -->
-    <div
-      class="modal fade"
-      id="newTransactionModal"
-      tabindex="-1"
-      role="dialog"
-    >
+    <div class="modal fade" id="newTransactionModal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">
-              <span v-show="!editMode">Novo lançamento</span>
+              <span v-show="!editMode">Nova {{ transactionType }}</span>
               <span v-show="editMode">Editar lançamento</span>
             </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form @submit.prevent="editMode ? updateUser() : createUser()">
+          <form @submit.prevent="editMode ? updateTransaction() : createTransaction()">
             <div class="modal-body">
-              <div class="form-group">
-                <div class="form-group">
-                  <input
-                    type="radio"
-                    name="expense"
-                    id="expense"
-                    v-bind:value="true"
-                    v-model="transactionType"
-                  />
-                  <label for="expense">despesa</label>
-                  <input
-                    type="radio"
-                    name="incoming"
-                    id="incoming"
-                    v-bind:value="false"
-                    v-model="transactionType"
-                  />
-                  <label for="incoming">receita</label>
-                  <input
-                    type="radio"
-                    name="transfer"
-                    id="transfer"
-                    v-bind:value="false"
-                    v-model="transactionType"
-                  />
-                  <label for="incoming">transferência</label>
-                </div>
-              </div>
               <div class="form-group">
                 <label for="description">Descrição</label>
                 <input
@@ -182,25 +140,45 @@
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="account">Conta</label>
+                    <label v-if="this.form.type != 2" for="account_origin">Conta</label>
+                    <label v-if="this.form.type == 2" for="account_origin">Conta origem</label>
                     <select
                       required
-                      v-model="form.account"
-                      name="account"
+                      v-model="form.account_origin"
+                      name="account_origin"
                       class="form-control"
-                      :class="{ 'is-invalid': form.errors.has('account') }"
+                      :class="{ 'is-invalid': form.errors.has('account_origin') }"
                     >
                       <option
                         v-for="account in accounts"
                         :value="account.id"
                         :key="account.id"
-                        >{{ account.name }}</option
-                      >
+                      >{{ account.name }}</option>
                     </select>
-                    <has-error :form="form" field="account"></has-error>
+                    <has-error :form="form" field="account_origin"></has-error>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div v-if="this.form.type == 2" class="col-sm-6">
+                  <div class="form-group">
+                    <label for="account_destiny">Conta destino</label>
+                    <select
+                      required
+                      v-model="form.account_destiny"
+                      name="account_destiny"
+                      class="form-control"
+                      :class="{ 'is-invalid': form.errors.has('account_destiny') }"
+                    >
+                      <option
+                        v-for="account in accounts"
+                        :value="account.id"
+                        :key="account.id"
+                      >{{ account.name }}</option>
+                    </select>
+                    <has-error :form="form" field="account_destiny"></has-error>
+                  </div>
+                </div>
+
+                <div v-if="this.form.type != 2" class="col-sm-6">
                   <div class="form-group">
                     <label for="category">Categoria</label>
                     <select
@@ -215,8 +193,7 @@
                         :value="category.id"
                         :key="category.id"
                         :label="category.name"
-                      >
-                      </option>
+                      ></option>
                     </select>
                     <has-error :form="form" field="category"></has-error>
                   </div>
@@ -236,9 +213,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">
-                Fechar
-              </button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
               <button type="submit" class="btn btn-success">Salvar</button>
             </div>
           </form>
@@ -261,11 +236,12 @@ export default {
       transactionType: "",
       form: new Form({
         id: "",
-        transactionType: "",
+        type: "",
         description: "",
         value: "",
         date: "",
-        account: "",
+        account_origin: "",
+        account_destiny: "",
         category: "",
         note: ""
       })
@@ -352,6 +328,26 @@ export default {
     },
 
     newTransactionModal(transactionType) {
+      switch (transactionType) {
+        case "expense":
+          this.transactionType = "despesa";
+          this.form.type = 0;
+          console.log(this.form.type);
+          break;
+        case "incoming":
+          this.transactionType = "receita";
+          this.form.type = 1;
+          console.log(this.form.type);
+          break;
+        case "transfer":
+          this.transactionType = "transferência";
+          this.form.type = 2;
+          console.log(this.form.type);
+          break;
+        default:
+          console.log("erro");
+      }
+
       // if (transactionType === null) {
       //   this.editMode = false;
       //   this.form.reset();
@@ -360,27 +356,27 @@ export default {
       //   this.form.fill(transactionType);
       // }
       $("#newTransactionModal").modal("show");
+    },
+
+    async createTransaction() {
+      this.$Progress.start();
+      await this.form
+        .post("/api/transaction")
+        .then(() => {
+          Fire.$emit("RefreshTransactionsTable");
+          $("#newTransactionModal").modal("hide");
+
+          Toast.fire({
+            icon: "success",
+            title: "Transação criada com sucesso"
+          });
+          this.$Progress.finish();
+        })
+        .catch(() => {
+          console.log("Erro ao criar transação");
+          this.$Progress.fail();
+        });
     }
-
-    // async createUser() {
-    //   this.$Progress.start();
-    //   await this.form
-    //     .post("/api/user")
-    //     .then(() => {
-    //       Fire.$emit("RefreshTransactionsTable");
-    //       $("#newTransactionModal").modal("hide");
-
-    //       Toast.fire({
-    //         icon: "success",
-    //         title: "Usuário criado com sucesso"
-    //       });
-    //       this.$Progress.finish();
-    //     })
-    //     .catch(() => {
-    //       console.log("Erro ao criar usuário");
-    //       this.$Progress.fail();
-    //     });
-    // },
 
     // async updateUser(id) {
     //   this.$Progress.start();

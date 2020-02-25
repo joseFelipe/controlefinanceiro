@@ -3340,31 +3340,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3377,11 +3352,12 @@ __webpack_require__.r(__webpack_exports__);
       transactionType: "",
       form: new Form({
         id: "",
-        transactionType: "",
+        type: "",
         description: "",
         value: "",
         date: "",
-        account: "",
+        account_origin: "",
+        account_destiny: "",
         category: "",
         note: ""
       })
@@ -3565,33 +3541,69 @@ __webpack_require__.r(__webpack_exports__);
       }, null, this);
     },
     newTransactionModal: function newTransactionModal(transactionType) {
-      // if (transactionType === null) {
+      switch (transactionType) {
+        case "expense":
+          this.transactionType = "despesa";
+          this.form.type = 0;
+          console.log(this.form.type);
+          break;
+
+        case "incoming":
+          this.transactionType = "receita";
+          this.form.type = 1;
+          console.log(this.form.type);
+          break;
+
+        case "transfer":
+          this.transactionType = "transferência";
+          this.form.type = 2;
+          console.log(this.form.type);
+          break;
+
+        default:
+          console.log("erro");
+      } // if (transactionType === null) {
       //   this.editMode = false;
       //   this.form.reset();
       // } else {
       //   this.editMode = true;
       //   this.form.fill(transactionType);
       // }
+
+
       $("#newTransactionModal").modal("show");
-    } // async createUser() {
-    //   this.$Progress.start();
-    //   await this.form
-    //     .post("/api/user")
-    //     .then(() => {
-    //       Fire.$emit("RefreshTransactionsTable");
-    //       $("#newTransactionModal").modal("hide");
-    //       Toast.fire({
-    //         icon: "success",
-    //         title: "Usuário criado com sucesso"
-    //       });
-    //       this.$Progress.finish();
-    //     })
-    //     .catch(() => {
-    //       console.log("Erro ao criar usuário");
-    //       this.$Progress.fail();
-    //     });
-    // },
-    // async updateUser(id) {
+    },
+    createTransaction: function createTransaction() {
+      var _this5 = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function createTransaction$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              this.$Progress.start();
+              _context4.next = 3;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(this.form.post("/api/transaction").then(function () {
+                Fire.$emit("RefreshTransactionsTable");
+                $("#newTransactionModal").modal("hide");
+                Toast.fire({
+                  icon: "success",
+                  title: "Transação criada com sucesso"
+                });
+
+                _this5.$Progress.finish();
+              })["catch"](function () {
+                console.log("Erro ao criar transação");
+
+                _this5.$Progress.fail();
+              }));
+
+            case 3:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, null, this);
+    } // async updateUser(id) {
     //   this.$Progress.start();
     //   this.form
     //     .put("api/user/" + this.form.id)
@@ -3648,18 +3660,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     categoriesComputed: function categoriesComputed() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.categories.forEach(function (category) {
         console.log(category.id, category.name);
 
-        _this5.categoriesNew.push(category);
+        _this6.categoriesNew.push(category);
 
-        _this5.categories.forEach(function (subcategory) {
+        _this6.categories.forEach(function (subcategory) {
           if (subcategory.parent_id != 0) if (category.id == subcategory.parent_id) {
             console.log("- " + subcategory.name);
 
-            _this5.subcategoriesNew.push(subcategory);
+            _this6.subcategoriesNew.push(subcategory);
           }
         });
       });
@@ -3667,17 +3679,17 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    var _this6 = this;
+    var _this7 = this;
 
     this.$Progress.start();
     Fire.$on("search", function () {
-      _this6.loadTransactions(true);
+      _this7.loadTransactions(true);
     });
     this.loadTransactions();
     this.loadCategories();
     this.loadAccounts();
     Fire.$on("RefreshTransactionsTable", function () {
-      _this6.loadTransactions();
+      _this7.loadTransactions();
     });
     this.$Progress.finish();
     console.log("Component mounted.");
@@ -65704,7 +65716,7 @@ var render = function() {
                 attrs: { type: "button" },
                 on: {
                   click: function($event) {
-                    return _vm.newTransactionModal(_vm.transfer)
+                    return _vm.newTransactionModal("transfer")
                   }
                 }
               },
@@ -65721,7 +65733,7 @@ var render = function() {
                 attrs: { type: "button" },
                 on: {
                   click: function($event) {
-                    return _vm.newTransactionModal(_vm.incoming)
+                    return _vm.newTransactionModal("incoming")
                   }
                 }
               },
@@ -65738,7 +65750,7 @@ var render = function() {
                 attrs: { type: "button" },
                 on: {
                   click: function($event) {
-                    return _vm.newTransactionModal(_vm.expense)
+                    return _vm.newTransactionModal("expense")
                   }
                 }
               },
@@ -65756,6 +65768,10 @@ var render = function() {
               "tbody",
               _vm._l(_vm.transactions, function(transaction) {
                 return _c("tr", { key: transaction.id }, [
+                  _c("td", [
+                    _c("div", { style: _vm._f("TypeBadge")(transaction.type) })
+                  ]),
+                  _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(transaction.description))]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(transaction.value))]),
@@ -65842,7 +65858,7 @@ var render = function() {
                           }
                         ]
                       },
-                      [_vm._v("Novo lançamento")]
+                      [_vm._v("Nova " + _vm._s(_vm.transactionType))]
                     ),
                     _vm._v(" "),
                     _c(
@@ -65870,103 +65886,14 @@ var render = function() {
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
-                        _vm.editMode ? _vm.updateUser() : _vm.createUser()
+                        _vm.editMode
+                          ? _vm.updateTransaction()
+                          : _vm.createTransaction()
                       }
                     }
                   },
                   [
                     _c("div", { staticClass: "modal-body" }, [
-                      _c("div", { staticClass: "form-group" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.transactionType,
-                                expression: "transactionType"
-                              }
-                            ],
-                            attrs: {
-                              type: "radio",
-                              name: "expense",
-                              id: "expense"
-                            },
-                            domProps: {
-                              value: true,
-                              checked: _vm._q(_vm.transactionType, true)
-                            },
-                            on: {
-                              change: function($event) {
-                                _vm.transactionType = true
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("label", { attrs: { for: "expense" } }, [
-                            _vm._v("despesa")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.transactionType,
-                                expression: "transactionType"
-                              }
-                            ],
-                            attrs: {
-                              type: "radio",
-                              name: "incoming",
-                              id: "incoming"
-                            },
-                            domProps: {
-                              value: false,
-                              checked: _vm._q(_vm.transactionType, false)
-                            },
-                            on: {
-                              change: function($event) {
-                                _vm.transactionType = false
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("label", { attrs: { for: "incoming" } }, [
-                            _vm._v("receita")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.transactionType,
-                                expression: "transactionType"
-                              }
-                            ],
-                            attrs: {
-                              type: "radio",
-                              name: "transfer",
-                              id: "transfer"
-                            },
-                            domProps: {
-                              value: false,
-                              checked: _vm._q(_vm.transactionType, false)
-                            },
-                            on: {
-                              change: function($event) {
-                                _vm.transactionType = false
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("label", { attrs: { for: "incoming" } }, [
-                            _vm._v("transferência")
-                          ])
-                        ])
-                      ]),
-                      _vm._v(" "),
                       _c(
                         "div",
                         { staticClass: "form-group" },
@@ -66123,9 +66050,21 @@ var render = function() {
                             "div",
                             { staticClass: "form-group" },
                             [
-                              _c("label", { attrs: { for: "account" } }, [
-                                _vm._v("Conta")
-                              ]),
+                              this.form.type != 2
+                                ? _c(
+                                    "label",
+                                    { attrs: { for: "account_origin" } },
+                                    [_vm._v("Conta")]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              this.form.type == 2
+                                ? _c(
+                                    "label",
+                                    { attrs: { for: "account_origin" } },
+                                    [_vm._v("Conta origem")]
+                                  )
+                                : _vm._e(),
                               _vm._v(" "),
                               _c(
                                 "select",
@@ -66134,15 +66073,20 @@ var render = function() {
                                     {
                                       name: "model",
                                       rawName: "v-model",
-                                      value: _vm.form.account,
-                                      expression: "form.account"
+                                      value: _vm.form.account_origin,
+                                      expression: "form.account_origin"
                                     }
                                   ],
                                   staticClass: "form-control",
                                   class: {
-                                    "is-invalid": _vm.form.errors.has("account")
+                                    "is-invalid": _vm.form.errors.has(
+                                      "account_origin"
+                                    )
                                   },
-                                  attrs: { required: "", name: "account" },
+                                  attrs: {
+                                    required: "",
+                                    name: "account_origin"
+                                  },
                                   on: {
                                     change: function($event) {
                                       var $$selectedVal = Array.prototype.filter
@@ -66158,7 +66102,7 @@ var render = function() {
                                         })
                                       _vm.$set(
                                         _vm.form,
-                                        "account",
+                                        "account_origin",
                                         $event.target.multiple
                                           ? $$selectedVal
                                           : $$selectedVal[0]
@@ -66180,80 +66124,172 @@ var render = function() {
                               ),
                               _vm._v(" "),
                               _c("has-error", {
-                                attrs: { form: _vm.form, field: "account" }
+                                attrs: {
+                                  form: _vm.form,
+                                  field: "account_origin"
+                                }
                               })
                             ],
                             1
                           )
                         ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "col-sm-6" }, [
-                          _c(
-                            "div",
-                            { staticClass: "form-group" },
-                            [
-                              _c("label", { attrs: { for: "category" } }, [
-                                _vm._v("Categoria")
-                              ]),
-                              _vm._v(" "),
+                        this.form.type == 2
+                          ? _c("div", { staticClass: "col-sm-6" }, [
                               _c(
-                                "select",
-                                {
-                                  directives: [
+                                "div",
+                                { staticClass: "form-group" },
+                                [
+                                  _c(
+                                    "label",
+                                    { attrs: { for: "account_destiny" } },
+                                    [_vm._v("Conta destino")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "select",
                                     {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.form.category,
-                                      expression: "form.category"
-                                    }
-                                  ],
-                                  staticClass: "form-control",
-                                  class: {
-                                    "is-invalid": _vm.form.errors.has(
-                                      "category"
-                                    )
-                                  },
-                                  attrs: { required: "", name: "category" },
-                                  on: {
-                                    change: function($event) {
-                                      var $$selectedVal = Array.prototype.filter
-                                        .call($event.target.options, function(
-                                          o
-                                        ) {
-                                          return o.selected
-                                        })
-                                        .map(function(o) {
-                                          var val =
-                                            "_value" in o ? o._value : o.value
-                                          return val
-                                        })
-                                      _vm.$set(
-                                        _vm.form,
-                                        "category",
-                                        $event.target.multiple
-                                          ? $$selectedVal
-                                          : $$selectedVal[0]
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.form.account_destiny,
+                                          expression: "form.account_destiny"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      class: {
+                                        "is-invalid": _vm.form.errors.has(
+                                          "account_destiny"
+                                        )
+                                      },
+                                      attrs: {
+                                        required: "",
+                                        name: "account_destiny"
+                                      },
+                                      on: {
+                                        change: function($event) {
+                                          var $$selectedVal = Array.prototype.filter
+                                            .call(
+                                              $event.target.options,
+                                              function(o) {
+                                                return o.selected
+                                              }
+                                            )
+                                            .map(function(o) {
+                                              var val =
+                                                "_value" in o
+                                                  ? o._value
+                                                  : o.value
+                                              return val
+                                            })
+                                          _vm.$set(
+                                            _vm.form,
+                                            "account_destiny",
+                                            $event.target.multiple
+                                              ? $$selectedVal
+                                              : $$selectedVal[0]
+                                          )
+                                        }
+                                      }
+                                    },
+                                    _vm._l(_vm.accounts, function(account) {
+                                      return _c(
+                                        "option",
+                                        {
+                                          key: account.id,
+                                          domProps: { value: account.id }
+                                        },
+                                        [_vm._v(_vm._s(account.name))]
                                       )
+                                    }),
+                                    0
+                                  ),
+                                  _vm._v(" "),
+                                  _c("has-error", {
+                                    attrs: {
+                                      form: _vm.form,
+                                      field: "account_destiny"
                                     }
-                                  }
-                                },
-                                _vm._l(_vm.categories, function(category) {
-                                  return _c("option", {
-                                    key: category.id,
-                                    attrs: { label: category.name },
-                                    domProps: { value: category.id }
                                   })
-                                }),
-                                0
-                              ),
-                              _vm._v(" "),
-                              _c("has-error", {
-                                attrs: { form: _vm.form, field: "category" }
-                              })
-                            ],
-                            1
-                          )
-                        ])
+                                ],
+                                1
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        this.form.type != 2
+                          ? _c("div", { staticClass: "col-sm-6" }, [
+                              _c(
+                                "div",
+                                { staticClass: "form-group" },
+                                [
+                                  _c("label", { attrs: { for: "category" } }, [
+                                    _vm._v("Categoria")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "select",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.form.category,
+                                          expression: "form.category"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      class: {
+                                        "is-invalid": _vm.form.errors.has(
+                                          "category"
+                                        )
+                                      },
+                                      attrs: { required: "", name: "category" },
+                                      on: {
+                                        change: function($event) {
+                                          var $$selectedVal = Array.prototype.filter
+                                            .call(
+                                              $event.target.options,
+                                              function(o) {
+                                                return o.selected
+                                              }
+                                            )
+                                            .map(function(o) {
+                                              var val =
+                                                "_value" in o
+                                                  ? o._value
+                                                  : o.value
+                                              return val
+                                            })
+                                          _vm.$set(
+                                            _vm.form,
+                                            "category",
+                                            $event.target.multiple
+                                              ? $$selectedVal
+                                              : $$selectedVal[0]
+                                          )
+                                        }
+                                      }
+                                    },
+                                    _vm._l(_vm.categories, function(category) {
+                                      return _c("option", {
+                                        key: category.id,
+                                        attrs: { label: category.name },
+                                        domProps: { value: category.id }
+                                      })
+                                    }),
+                                    0
+                                  ),
+                                  _vm._v(" "),
+                                  _c("has-error", {
+                                    attrs: { form: _vm.form, field: "category" }
+                                  })
+                                ],
+                                1
+                              )
+                            ])
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
                       _c(
@@ -66312,6 +66348,8 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
+        _c("th", [_vm._v("Tipo")]),
+        _vm._v(" "),
         _c("th", [_vm._v("Descrição")]),
         _vm._v(" "),
         _c("th", [_vm._v("Valor")]),
@@ -66354,7 +66392,7 @@ var staticRenderFns = [
           staticClass: "btn btn-danger",
           attrs: { type: "button", "data-dismiss": "modal" }
         },
-        [_vm._v("\n              Fechar\n            ")]
+        [_vm._v("Fechar")]
       ),
       _vm._v(" "),
       _c(
@@ -83177,6 +83215,36 @@ var routes = [{
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_6__["default"]({
   mode: "history",
   routes: routes
+});
+Vue.filter("Type", function (text) {
+  switch (text) {
+    case 0:
+      return "despesa";
+
+    case 1:
+      return "receita";
+
+    case 2:
+      return "transferência";
+
+    default:
+      return "Erro (case) type";
+  }
+});
+Vue.filter("TypeBadge", function (text) {
+  switch (text) {
+    case 0:
+      return "background-color: #e3342f; width: 12px; height: 12px; border-radius: 50%; margin-right: 0.5%;";
+
+    case 1:
+      return "background-color: #38c172; width: 12px; height: 12px; border-radius: 50%; margin-right: 0.5%;";
+
+    case 2:
+      return "background-color: #6c757d; width: 12px; height: 12px; border-radius: 50%; margin-right: 0.5%;";
+
+    default:
+      return "Erro (case) type badge";
+  }
 });
 Vue.filter("accountType", function (text) {
   switch (text) {

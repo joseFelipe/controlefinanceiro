@@ -90,6 +90,32 @@ const router = new VueRouter({
   routes
 });
 
+Vue.filter("Type", function(text) {
+  switch (text) {
+    case 0:
+      return "despesa";
+    case 1:
+      return "receita";
+    case 2:
+      return "transferência";
+    default:
+      return "Erro (case) type";
+  }
+});
+
+Vue.filter("TypeBadge", function(text) {
+  switch (text) {
+    case 0:
+      return "background-color: #e3342f; width: 12px; height: 12px; border-radius: 50%; margin-right: 0.5%;";
+    case 1:
+      return "background-color: #38c172; width: 12px; height: 12px; border-radius: 50%; margin-right: 0.5%;";
+    case 2:
+      return "background-color: #6c757d; width: 12px; height: 12px; border-radius: 50%; margin-right: 0.5%;";
+    default:
+      return "Erro (case) type badge";
+  }
+});
+
 Vue.filter("accountType", function(text) {
   switch (text) {
     case "current":
